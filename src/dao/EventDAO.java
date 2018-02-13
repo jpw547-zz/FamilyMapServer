@@ -26,19 +26,27 @@ public class EventDAO {
 	      System.out.println("Opened database successfully");
 	}
 	
-	public void addEvent(model.Event e) {
+	public void addEvent(Event e) {
 		
 	}
 	
-	public void modifyEvent(model.Event e) {
+	public void modifyEvent(Event e) {
 		
 	}
 	
-	public void deleteEvent(model.Event e) {
+	public void deleteEvent(Event e) {
 		
 	}
 	
 	public void deleteAllEvents() {
 		
+	}
+	
+	public Event getEvent(String eventID) {
+		return null;
+	}
+	
+	public Event[] getAllEvents(String personID) {
+		return null;
 	}
 }

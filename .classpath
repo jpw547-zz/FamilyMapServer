@@ -3,5 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/jpw547/Downloads/familymapserver/jars/sqlite-jdbc-3.7.2.jar"/>
+	<classpathentry kind="lib" path="/home/jpw547/Downloads/familymapserver/jars/json-20160212.jar"/>
+	<classpathentry kind="lib" path="/home/jpw547/Downloads/familymapserver/jars/JUnit4/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="/home/jpw547/Downloads/familymapserver/jars/JUnit4/junit-4.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

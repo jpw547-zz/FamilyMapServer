@@ -26,19 +26,27 @@ public class PersonDAO {
 	      System.out.println("Opened database successfully");
 	}
 	
-	public void addPerson(model.Person p) {
+	public void addPerson(Person p) {
 		
 	}
 	
-	public void modifyPerson(model.Person p) {
+	public void modifyPerson(Person p) {
 		
 	}
 	
-	public void deletePerson(model.Person p) {
+	public void deletePerson(Person p) {
 		
 	}
 	
 	public void deleteAllPersons() {
 		
+	}
+	
+	public Person getPerson(String personID) {
+		return null;
+	}
+	
+	public Person[] getAllPersons() {
+		return null;
 	}
 }

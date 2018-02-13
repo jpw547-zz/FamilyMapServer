@@ -26,19 +26,27 @@ public class UserDAO {
 	      System.out.println("Opened database successfully");
 	}
 	
-	public void addUser(model.User u) {
+	public void addUser(User u) {
 		
 	}
 	
-	public void modifyUser(model.User u) {
+	public void modifyUser(User u) {
 		
 	}
 	
-	public void deleteUser(model.User u) {
+	public void deleteUser(User u) {
 		
 	}
 	
 	public void deleteAllUsers() {
 		
+	}
+	
+	public User getUser(String username) {
+		return null;
+	}
+	
+	public User[] getAllUsers() {
+		return null;
 	}
 }

@@ -26,19 +26,27 @@ public class AuthDAO {
 	      System.out.println("Opened database successfully");
 	}
 	
-	public void addAuthToken(model.AuthToken a) {
+	public void addAuthToken(AuthToken a) {
 		
 	}
 	
-	public void modifyAuthToken(model.AuthToken a) {
+	public void modifyAuthToken(AuthToken a) {
 		
 	}
 	
-	public void deleteAuthToken(model.AuthToken a) {
+	public void deleteAuthToken(AuthToken a) {
 		
 	}
 	
 	public void deleteAllAuthTokens() {
 		
+	}
+	
+	public AuthToken getAuthToken(String authID) {
+		return null;
+	}
+	
+	public AuthToken[] getAllAuthTokens() {
+		return null;
 	}
 }
