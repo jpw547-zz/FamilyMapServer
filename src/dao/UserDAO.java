@@ -15,7 +15,7 @@ public class UserDAO {
 	/**The SQL Database Connection object.*/
 	private Connection c;
 	
-	/**@returns		the database Connection object*/
+	/**@return		the database Connection object*/
 	public Connection getConnection() { 
 		return c;
 	}
@@ -57,14 +57,14 @@ public class UserDAO {
 	}
 	
 	/**Retrieves the information for a User in the database.
-	 * @param userName		the identifier for the User to be returned
-	 * @returns				a User object representing the information in the database.*/
+	 * @param username		the identifier for the User to be returned
+	 * @return				a User object representing the information in the database.*/
 	public User getUser(String username) {
 		return null;
 	}
 	
 	/**Retrieves all information for all Persons in the database.
-	 * @returns 			an array of User objects representing all the information in the User table of the database.*/
+	 * @return 			an array of User objects representing all the information in the User table of the database.*/
 	public User[] getAllUsers() {
 		return null;
 	}

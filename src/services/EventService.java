@@ -2,18 +2,23 @@ package services;
 
 import requests.EventRequest;
 import results.EventResult;
-import model.AuthToken;
 
+/**The class definition for an EventService object.*/
 public class EventService {
-	public EventService() {
-		
-	}
+	/**The general constructor for an EventService object.*/
+	public EventService() {}
 	
-	public EventResult AllEvents(EventRequest er) {
+	/**Finds all Events for all family members of the currently logged in user.
+	 * @param er			the EventRequest with the AuthToken for the user.
+	 * @return				an EventResult object with the response data, or <code>null</code> if no Events are found.*/
+	public EventResult getAll(EventRequest er) {
 		return null;
 	}
 	
-	public EventResult SingleEvent(EventRequest er) {
+	/**Finds a specific Event based on the eventID.
+	 * @param er			the EventRequest with the eventID to be found.
+	 * @return				an EventResult object with the response data, or <code>null</code> if not found.*/
+	public EventResult getEvent(EventRequest er) {
 		return null;
 	}
 }

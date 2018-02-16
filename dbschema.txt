@@ -1,0 +1,7 @@
+CREATE TABLE `AuthTokens` ( `tokenID` TEXT NOT NULL UNIQUE, `userName` TEXT NOT NULL, `personID` TEXT NOT NULL, FOREIGN KEY(`userName`) REFERENCES `Users`(`userName`), PRIMARY KEY(`tokenID`), FOREIGN KEY(`personID`) REFERENCES `Persons`(`personID`) )
+
+CREATE TABLE `Events` ( `eventID` TEXT NOT NULL UNIQUE, `personID` TEXT NOT NULL, `descendant` TEXT NOT NULL, `latitude` NUMERIC, `longitude` NUMERIC, `country` TEXT NOT NULL, `city` TEXT NOT NULL, `eventType` TEXT NOT NULL, `year` TEXT, FOREIGN KEY(`descendant`) REFERENCES `Users`(`userName`), FOREIGN KEY(`personID`) REFERENCES `Persons`(`personID`), PRIMARY KEY(`eventID`) )
+
+CREATE TABLE "Persons" ( `personID` TEXT NOT NULL UNIQUE, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `gender` TEXT NOT NULL, `descendant` TEXT NOT NULL, `father` TEXT, `mother` TEXT, `spouse` TEXT, PRIMARY KEY(`personID`), FOREIGN KEY(`spouse`) REFERENCES `Persons`(`personID`), FOREIGN KEY(`descendant`) REFERENCES `Users`(`userName`), FOREIGN KEY(`father`) REFERENCES `Persons`(`personID`), FOREIGN KEY(`mother`) REFERENCES `Persons`(`personID`) )
+
+CREATE TABLE `Users` ( `userName` TEXT NOT NULL UNIQUE, `password` TEXT NOT NULL, `email` TEXT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `gender` TEXT NOT NULL, PRIMARY KEY(`userName`) )

@@ -15,7 +15,7 @@ public class EventDAO {
 	/**The SQL Database Connection object.*/
 	private Connection c;
 	
-	/**@returns		the database Connection object*/
+	/**@return		the database Connection object*/
 	public Connection getConnection() { 
 		return c;
 	}
@@ -58,13 +58,13 @@ public class EventDAO {
 	
 	/**Retrieves the information for an Event in the database.
 	 * @param eventID		the identifier for the Event to be returned
-	 * @returns				an Event object representing the information in the database.*/
+	 * @return				an Event object representing the information in the database.*/
 	public Event getEvent(String eventID) {
 		return null;
 	}
 	
 	/**Retrieves all information for all Events in the database.
-	 * @returns 			an array of Event objects representing all the information in the Event table of the database.*/
+	 * @return 			an array of Event objects representing all the information in the Event table of the database.*/
 	public Event[] getAllEvents(String personID) {
 		return null;
 	}

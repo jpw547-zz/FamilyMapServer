@@ -1,14 +1,17 @@
 package services;
 
 import requests.LoadRequest;
-import results.LoadResult;
+import results.Result;
 
+/**The class definition for a LoadService object.*/
 public class LoadService {
-	public LoadService() {
-		
-	}
+	/**The general constructor for a LoadService object.*/
+	public LoadService() {}
 	
-	public LoadResult load(LoadRequest lr) {
+	/**Clears all database information and then loads the given data into the database.
+	 * @param lr			a LoadRequest object with the information to insert.
+	 * @return				a Result object with the resulting message.*/
+	public Result load(LoadRequest lr) {
 		return null;
 	}
 }

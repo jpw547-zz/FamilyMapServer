@@ -1,14 +1,17 @@
 package services;
 
 import requests.FillRequest;
-import results.FillResult;
+import results.Result;
 
+/**The class definition for a FillService object.*/
 public class FillService {
-	public FillService() {
-		
-	}
+	/**The general constructor for a FillService object.*/
+	public FillService() {}
 	
-	public FillResult fill(FillRequest f) {
+	/**Fill the database with the given information for the user given. Any previous data in the database for the user is cleared out before the database is filled with the new data.
+	 * @param f			A FillRequest containing the user and information to fill the database with.
+	 * @return			A Result object with the resulting message.*/
+	public Result fill(FillRequest f) {
 		return null;
 	}
 }

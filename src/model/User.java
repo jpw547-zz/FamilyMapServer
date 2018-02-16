@@ -4,8 +4,7 @@ package model;
  * @author	John Werner
  */
 public class User {
-	/** General constructor for a User object.
-	 * @returns a User object*/
+	/** General constructor for a User object.*/
 	public User() {
 		
 	}
@@ -29,7 +28,7 @@ public class User {
 	private char gender; // “f” or “m”
 	
 	
-	/** @returns the User's userName*/
+	/** @return the User's userName*/
 	public String getUserName() { return userName; }
 	
 	/** Sets the User object's userName.
@@ -37,7 +36,7 @@ public class User {
 	 * @param userName 	the desired username*/
 	public void setUserName(String userName) { this.userName = userName; }
 	
-	/** @returns the User's password*/
+	/** @return the User's password*/
 	public String getPassword() { return password; }
 	
 	/** Sets the User object's password.
@@ -45,7 +44,7 @@ public class User {
 	 * @param password the desired password*/
 	public void setPassword(String password) { this.password = password; }
 	
-	/** @returns the User's email address*/
+	/** @return the User's email address*/
 	public String getEmail() { return email; }
 	
 	/** Sets the User object's email address.
@@ -53,7 +52,7 @@ public class User {
 	 * @param email the desired email address*/
 	public void setEmail(String email) { this.email = email; }
 	
-	/** @returns the User's first name*/
+	/** @return the User's first name*/
 	public String getFirstName() { return firstName; }
 	
 	/** Sets the User object's first name.
@@ -61,7 +60,7 @@ public class User {
 	 * @param firstName the person's first name*/
 	public void setFirstName(String firstName) { this.firstName = firstName; }
 	
-	/** @returns the User's last name*/
+	/** @return the User's last name*/
 	public String getLastName() { return lastName; }
 	
 	/** Sets the User object's last name.
@@ -69,7 +68,7 @@ public class User {
 	 * @param lastName the person's last name*/
 	public void setLastName(String lastName) { this.lastName = lastName; }
 	
-	/** @returns the User's gender*/
+	/** @return the User's gender*/
 	public char getGender() { return gender; }
 	
 	/** Sets the User object's gender.

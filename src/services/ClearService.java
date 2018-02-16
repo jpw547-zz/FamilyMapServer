@@ -1,13 +1,15 @@
 package services;
 
-import results.ClearResult;
+import results.Result;
 
+/**The class definition for a ClearService object.*/
 public class ClearService {
-	public ClearService() {
-		
-	}
+	/**The general constructor for a ClearService object.*/
+	public ClearService() {}
 	
-	public ClearResult clear() {
+	/**Clears the information in the database.
+	 * @return 		a Result object with the resulting message.*/
+	public Result clear() {
 		return null;
 	}
 }

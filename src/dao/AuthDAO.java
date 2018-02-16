@@ -16,7 +16,7 @@ public class AuthDAO {
 	private Connection c;
 	
 	
-	/**@returns		the database Connection object*/
+	/**@return		the database Connection object*/
 	public Connection getConnection() { 
 		return c;
 	}
@@ -59,13 +59,13 @@ public class AuthDAO {
 	
 	/**Retrieves the information for an AuthToken in the database.
 	 * @param authID		the identifier for the AuthToken to be returned
-	 * @returns				an AuthToken object representing the information in the database.*/
+	 * @return				an AuthToken object representing the information in the database.*/
 	public AuthToken getAuthToken(String authID) {
 		return null;
 	}
 	
 	/**Retrieves all information for all AuthTokens in the database.
-	 * @returns 			an array of AuthToken objects representing all the information in the AuthToken table of the database.*/
+	 * @return 			an array of AuthToken objects representing all the information in the AuthToken table of the database.*/
 	public AuthToken[] getAllAuthTokens() {
 		return null;
 	}

@@ -15,7 +15,7 @@ public class PersonDAO {
 	/**The SQL Database Connection object.*/
 	private Connection c;
 	
-	/**@returns		the database Connection object*/
+	/**@return		the database Connection object*/
 	public Connection getConnection() { 
 		return c;
 	}
@@ -58,13 +58,13 @@ public class PersonDAO {
 	
 	/**Retrieves the information for a Person in the database.
 	 * @param personID		the identifier for the Person to be returned
-	 * @returns				a Person object representing the information in the database.*/
+	 * @return				a Person object representing the information in the database.*/
 	public Person getPerson(String personID) {
 		return null;
 	}
 	
 	/**Retrieves all information for all Persons in the database.
-	 * @returns 			an array of Person objects representing all the information in the Person table of the database.*/
+	 * @return 			an array of Person objects representing all the information in the Person table of the database.*/
 	public Person[] getAllPersons() {
 		return null;
 	}
