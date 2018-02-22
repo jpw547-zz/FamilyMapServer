@@ -5,8 +5,16 @@ package model;
  */
 public class User {
 	/** General constructor for a User object.*/
-	public User() {
-		
+	public User() {}
+	
+	/**A constructor that takes the attributes as parameters.*/
+	public User(String u, String p, String e, String f, String l, char g) {
+		setUserName(u);
+		setPassword(p);
+		setEmail(e);
+		setFirstName(f);
+		setLastName(l);
+		setGender(g);
 	}
 	
 	/** A non-empty String containing the unique identifier for a user.*/

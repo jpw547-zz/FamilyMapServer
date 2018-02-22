@@ -3,8 +3,19 @@ package model;
 /**The Event class defines the attributes required for family history events that can be used in the Family Map Server.*/
 public class Event {
 	/**The general constructor for an Event object.*/
-	public Event() {
-		
+	public Event() {}
+	
+	/**The constructor that takes attributes as parameters.*/
+	public Event(String e, String p, String d, double lat, double lon, String country, String city, String type, String y) {
+		setEventID(e);
+		setPersonID(p);
+		setDescendant(d);
+		setLatitude(lat);
+		setLongitude(lon);
+		setCountry(country);
+		setCity(city);
+		setEventType(type);
+		setYear(y);
 	}
 	
 	/**A non-empty, unique identifier for the Event object.*/

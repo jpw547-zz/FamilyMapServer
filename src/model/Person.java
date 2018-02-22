@@ -5,8 +5,17 @@ package model;
  * @author John Werner*/
 public class Person {
 	/** The general constructor for a Person object.*/
-	public Person() {
-		
+	public Person() {}
+	
+	public Person(String p, String f, String l, char g, String d, String father, String mother, String spouse) {
+		setPersonID(p);
+		setFirstName(f);
+		setLastName(l);
+		setGender(g);
+		setDescendant(d);
+		setFather(father);
+		setMother(mother);
+		setSpouse(spouse);
 	}
 	
 	/** A unique identifier for the Person object.*/
