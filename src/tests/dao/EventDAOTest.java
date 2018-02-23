@@ -98,5 +98,4 @@ public class EventDAOTest {
 			fail("testDeleteAllEvents failed.");
 		}
 	}
-
 }

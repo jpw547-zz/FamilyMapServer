@@ -30,8 +30,8 @@ public class AuthTokenTest {
 	public void testSetUserName() { a.setUserName("johnny"); assertEquals("johnny", a.getUserName()); }
 
 	@Test
-	public void testGetPersonId() { assertEquals("abcd1234", a.getPersonId()); }
+	public void testGetPersonId() { assertEquals("abcd1234", a.getPersonID()); }
 
 	@Test
-	public void testSetPersonId() { a.setPersonId("6"); assertEquals("6", a.getPersonId());}
+	public void testSetPersonId() { a.setPersonID("6"); assertEquals("6", a.getPersonID());}
 }

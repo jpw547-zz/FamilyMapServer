@@ -13,7 +13,7 @@ import dao.UserDAO;
 
 public class UserDAOTest {
 
-	private UserDAO ud = null;
+	private UserDAO ud;
 
 	@Before
 	public void setUp() throws Exception {
@@ -23,6 +23,7 @@ public class UserDAOTest {
 
 	@After
 	public void tearDown() throws Exception {
+		ud.deleteAllUsers();
 		ud.closeConnection(true);
 		ud = null;
 	}
@@ -77,5 +78,22 @@ public class UserDAOTest {
 		fail("testDeleteUser failed.");
 	}
 	
-	
+	@Test
+	public void testDeleteAll() {
+		User a = new User("xuther", "secret", "anemail@gmail.com", "Tom", "Jones", 'M');
+		User b = new User("mustard", "ketchup", "onion@msn.com", "Tomato", "Johnson", 'F');
+		User c = new User("cloudy", "darkness", "dragonofmist@gmail.com", "Farni", "Yokuora", 'M');
+		
+		try {
+			ud.addUser(a);
+			ud.addUser(b);
+			ud.addUser(c);
+			ud.deleteAllUsers();
+			if(ud.getAllUsers().size() > 0) {
+				throw new DatabaseException("getAllUsers failed.");
+			}
+		} catch(DatabaseException e) {
+			fail("testDeleteAllUsers failed.");
+		}
+	}
 }

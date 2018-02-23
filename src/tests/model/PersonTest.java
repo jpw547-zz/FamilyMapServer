@@ -12,10 +12,10 @@ public class PersonTest {
 	private Person p = null;
 	
 	@Before
-	public void setUp() throws Exception { p = new Person(); }
+	public void setUp() { p = new Person(); }
 
 	@After
-	public void tearDown() throws Exception { p = null; }
+	public void tearDown() { p = null; }
 
 	@Test
 	public void testPersonID() { p.setPersonID("e4e4e4e4"); assertEquals("e4e4e4e4", p.getPersonID()); }

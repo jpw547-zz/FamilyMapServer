@@ -2,31 +2,36 @@ package requests;
 
 /**This class defines the attributes for a LoginRequest object.*/
 public class LoginRequest {
+	
+//Constructors
 	/**The general constructor for a LoginRequest.
-	 * @param u			the username for the request.
-	 * @param p			the password for the request.*/
-	public LoginRequest(String u, String p) {
-		setUsername(u);
-		setPassword(p);
+	 * @param userName	the userName for the request.
+	 * @param password	the password for the request.*/
+	public LoginRequest(String userName, String password) {
+		setUsername(userName);
+		setPassword(password);
 	}
 	
-	/**The username of the person making the request.*/
-	private String username;
+//Data members
+	/**The userName of the person making the request.*/
+	private String userName;
 	
 	/**The password of the person making the request.*/
 	private String password;
-	
-	/**@return the username that is attached to the request.*/
-	public String getUsername() { return username; }
-	
-	/**Sets the username for the request.
-	 * @param username 	the desired username for the request.*/
-	public void setUsername(String username) { this.username = username; }
-	
-	/**@return the password that is attached to the request.*/
-	public String getPassword() { return password; }
+
+//Setters
+	/**Sets the userName for the request.
+	 * @param userName 	the desired userName for the request.*/
+	public void setUsername(String userName) { this.userName = userName; }
 	
 	/**Sets the password for the request.
 	 * @param password	the desired password for the request.*/
 	public void setPassword(String password) { this.password = password; }
+	
+//Getters
+	/**@return the userName that is attached to the request.*/
+	public String getUsername() { return userName; }
+	
+	/**@return the password that is attached to the request.*/
+	public String getPassword() { return password; }
 }

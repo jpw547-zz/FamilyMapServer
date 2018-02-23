@@ -10,52 +10,57 @@ import model.Event;
  * @author John Werner*/
 public class EventDAO {
 	
+//Constructors
 	/**The general constructor for an EventDAO object.*/
 	public EventDAO() {}
 	
+//Data members
 	/**The SQL Database Connection object.*/
 	private Connection c;
 	
-	/**@return		the database Connection object*/
-	public Connection getConnection() { return c; }
-	
+//Setters
 	/**Establishes a connection to the SQL database.*/
 	public void setConnection() {
 		try {
 	         Class.forName("org.sqlite.JDBC");
 	         c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
 	         c.setAutoCommit(false);
-	      } catch ( Exception e ) {
-	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	         System.exit(0);
+	      } catch (Exception e) {
+	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	      }
 	      //System.out.println("Opened database successfully");
 	}
 	
+//Getters
+	/**@return				the database Connection object*/
+	public Connection getConnection() { return c; }
+	
+//Remaining class methods
 	/**Closes the connection to the database.
-	 * @param commit	true to commit changes, false to rollback.
-	 * @throws DatabaseException */
+	 * @param commit		true to commit changes, false to rollback.
+	 * @throws 				DatabaseException */
 	public void closeConnection(boolean commit) throws DatabaseException {
 		try {
 			if(commit) { c.commit(); }
 			if(!commit) { c.rollback(); }
             c.close();
             c = null;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DatabaseException("closeConnection failed", e);
         }
 	}
 	
 	/**Adds an Event's information to the database.
-	 * @param e		the Event object
-	 * @throws		DatabaseException*/
+	 * @param e				the Event object
+	 * @throws				DatabaseException*/
 	public void addEvent(Event e) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "INSERT INTO Events (eventID, personID, descendant, latitude, longitude, country, city, eventType, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 				stmt = c.prepareStatement(sql);
+				
+				//Fill the statement with the Event parameters.
 				stmt.setString(1, e.getEventID());
 				stmt.setString(2, e.getPersonID());
 				stmt.setString(3, e.getDescendant());
@@ -65,9 +70,9 @@ public class EventDAO {
 				stmt.setString(7, e.getCity());
 				stmt.setString(8, e.getEventType());
 				stmt.setString(9, e.getYear());
-				if(stmt.executeUpdate() != 1) {
-					throw new DatabaseException("Add Event failed: Could not insert info");
-				}
+				
+				//Execute the finalized statement.
+				stmt.executeUpdate();
 			}
 			finally {
 				if(stmt != null) {
@@ -81,14 +86,16 @@ public class EventDAO {
 	}
 	
 	/**Modifies an existing database entry for an Event.
-	 * @param e		the Event object to be modified
-	 * @throws DatabaseException */
+	 * @param e				the Event object to be modified
+	 * @throws 				DatabaseException */
 	public void modifyEvent(Event e) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "UPDATE Events SET personID=?, descendant=?, latitude=?, longitude=?, country=?, city=?, eventType=?, year=? WHERE eventID=?;";
 				stmt = c.prepareStatement(sql);
+				
+				//Fill the statement with the Event parameters.
 				stmt.setString(1, e.getPersonID());
 				stmt.setString(2, e.getDescendant());
 				stmt.setDouble(3, e.getLatitude());
@@ -98,9 +105,9 @@ public class EventDAO {
 				stmt.setString(7, e.getEventType());
 				stmt.setString(8, e.getYear());
 				stmt.setString(9, e.getEventID());
-				if(stmt.executeUpdate() != 1) {
-					throw new DatabaseException("Modify Event failed: Could not update info");
-				}
+				
+				//Execute the finalized statement.
+				stmt.executeUpdate();
 			}
 			finally {
 				if(stmt != null) {
@@ -114,15 +121,19 @@ public class EventDAO {
 	}
 	
 	/**Deletes an existing database entry for an Event.
-	 * @param e		the Event object to be removed
-	 * @throws DatabaseException */
+	 * @param e				the Event object to be removed
+	 * @throws 				DatabaseException */
 	public void deleteEvent(Event e) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "DELETE FROM Events WHERE eventID = ?;";
 				stmt = c.prepareStatement(sql);
+				
+				//Fill the statement with eventID.
 				stmt.setString(1, e.getEventID());
+				
+				//Execute the finalized statement.
 				stmt.executeUpdate();
 			}
 			finally {
@@ -137,13 +148,15 @@ public class EventDAO {
 	}
 	
 	/**Deletes all Event information from the database.
-	 * @throws DatabaseException */
+	 * @throws 				DatabaseException */
 	public void deleteAllEvents() throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "DELETE FROM Events;";
 				stmt = c.prepareStatement(sql);
+				
+				//No extra parameters to add to the statement, so proceed to execution.
 				stmt.executeUpdate();
 			}
 			finally {
@@ -160,14 +173,18 @@ public class EventDAO {
 	/**Retrieves the information for an Event in the database.
 	 * @param eventID		the identifier for the Event to be returned
 	 * @return				an Event object representing the information in the database.
-	 * @throws DatabaseException */
+	 * @throws 				DatabaseException */
 	public Event getEvent(String eventID) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "SELECT * FROM Events WHERE eventID = ?;";
 				stmt = c.prepareStatement(sql);
+				
+				//Fill the statement with the given eventID.
 				stmt.setString(1, eventID);
+				
+				//Execute the query, and construct the Event from the information in the ResultSet.
 				ResultSet rs = stmt.executeQuery();
 				if(rs == null) { return null; }
 				return new Event(
@@ -193,17 +210,23 @@ public class EventDAO {
 	}
 	
 	/**Retrieves all information for all Events in the database.
-	 * @return 			an array of Event objects representing all the information in the Event table of the database.
-	 * @throws DatabaseException */
+	 * @return 				an array of Event objects representing all the information in the Event table of the database.
+	 * @throws 				DatabaseException */
 	public Set<Event> getAllEvents(String descendant) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "SELECT * FROM Events WHERE descendant=?;";
 				stmt = c.prepareStatement(sql);
+				
+				//Fill the statement with the descendant's userName.
 				stmt.setString(1, descendant);
+				
+				//Execute the finalized query.
 				ResultSet rs = stmt.executeQuery();
 				if(rs == null) { return null; }
+				
+				//Iterate over the ResultSet to construct Event objects and add them to the Set to be returned.
 				Set<Event> all = new TreeSet<Event>(); 
 				while(rs.next()) {
 					String eID = rs.getString("eventID"); 

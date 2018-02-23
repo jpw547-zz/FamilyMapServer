@@ -4,19 +4,28 @@ package model;
  * @author	John Werner
  */
 public class User {
+	
+//Constructors
 	/** General constructor for a User object.*/
 	public User() {}
 	
-	/**A constructor that takes the attributes as parameters.*/
-	public User(String u, String p, String e, String f, String l, char g) {
-		setUserName(u);
-		setPassword(p);
-		setEmail(e);
-		setFirstName(f);
-		setLastName(l);
-		setGender(g);
+	/**A constructor for initializing the attributes of a User.
+	 * @param userName		the userName
+	 * @param personID		the personID associated with this User
+	 * @param email			the email address
+	 * @param firstName		the first name of the User
+	 * @param lastName		the last name of the User
+	 * @param gender		the gender of the User*/
+	public User(String userName, String personID, String email, String firstName, String lastName, char gender) {
+		setUserName(userName);
+		setPassword(personID);
+		setEmail(email);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setGender(gender);
 	}
 	
+//Data members
 	/** A non-empty String containing the unique identifier for a user.*/
 	private String userName; // Non-empty string
 	
@@ -36,51 +45,47 @@ public class User {
 	private char gender; // “f” or “m”
 	
 	
+//Setters
+	/** Sets the User object's userName.
+	 * @param userName 	the desired userName*/
+	public void setUserName(String userName) { this.userName = userName; }
+	
+	/** Sets the User object's password.
+	 * @param password the desired password*/
+	public void setPassword(String password) { this.password = password; }
+	
+	/** Sets the User object's email address.
+	 * @param email the desired email address*/
+	public void setEmail(String email) { this.email = email; }
+	
+	/** Sets the User object's first name.
+	 * @param firstName the person's first name*/
+	public void setFirstName(String firstName) { this.firstName = firstName; }
+	
+	/** Sets the User object's last name.
+	 * @param lastName the person's last name*/
+	public void setLastName(String lastName) { this.lastName = lastName; }
+	
+	/** Sets the User object's gender.
+	 * @param gender the person's gender, either M or F*/
+	public void setGender(char gender) { this.gender = gender; }
+	
+//Getters
 	/** @return the User's userName*/
 	public String getUserName() { return userName; }
-	
-	/** Sets the User object's userName.
-	 * 
-	 * @param userName 	the desired username*/
-	public void setUserName(String userName) { this.userName = userName; }
 	
 	/** @return the User's password*/
 	public String getPassword() { return password; }
 	
-	/** Sets the User object's password.
-	 * 
-	 * @param password the desired password*/
-	public void setPassword(String password) { this.password = password; }
-	
 	/** @return the User's email address*/
 	public String getEmail() { return email; }
-	
-	/** Sets the User object's email address.
-	 * 
-	 * @param email the desired email address*/
-	public void setEmail(String email) { this.email = email; }
 	
 	/** @return the User's first name*/
 	public String getFirstName() { return firstName; }
 	
-	/** Sets the User object's first name.
-	 * 
-	 * @param firstName the person's first name*/
-	public void setFirstName(String firstName) { this.firstName = firstName; }
-	
 	/** @return the User's last name*/
 	public String getLastName() { return lastName; }
 	
-	/** Sets the User object's last name.
-	 * 
-	 * @param lastName the person's last name*/
-	public void setLastName(String lastName) { this.lastName = lastName; }
-	
 	/** @return the User's gender*/
 	public char getGender() { return gender; }
-	
-	/** Sets the User object's gender.
-	 * 
-	 * @param gender the person's gender, either M or F*/
-	public void setGender(char gender) { this.gender = gender; }
 }

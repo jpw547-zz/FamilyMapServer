@@ -82,13 +82,13 @@ public class PersonDAOTest {
 	}
 	
 	@Test
-	public void testDeleteAll() throws DatabaseException {
+	public void testDeleteAll() {
 		Person a = new Person("aegaeg", "Rocky", "Balboa", 'M', "cMonster", "A man", "A woman", "Adrian");;
 		Person b = new Person("adhtdrh", "Rocky", "Balboa", 'M', "cMonster", "A man", "A woman", "Adrian");
 		Person c = new Person("cxbxb", "Rocky", "Balboa", 'M', "cMonster", "A man", "A woman", "Adrian");
 		
-		pd.addPerson(a); pd.addPerson(b); pd.addPerson(c);
 		try {
+			pd.addPerson(a); pd.addPerson(b); pd.addPerson(c);
 			pd.deleteAllPersons();
 			if(pd.getAllPersons("cMonster").size() > 0) {
 				throw new DatabaseException("getAllPersons failed.");

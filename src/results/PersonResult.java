@@ -5,6 +5,8 @@ import model.Person;
 /**The class definition for the attributes of a PersonResult.
  * <p> Extends the Result class.*/
 public class PersonResult extends Result{
+	
+//Constructors
 	/**Constructor for returning one Person.
 	 * @param p			the person to be returned*/
 	public PersonResult(Person p) {
@@ -18,11 +20,12 @@ public class PersonResult extends Result{
 	}
 	
 	/**Constructor for an error PersonResult.
-	 * @param error				the error message*/
+	 * @param error		the error message*/
 	public PersonResult(String error) {
 		setError(error);
 	}
 	
+//Data members
 	/**The Person to be returned.*/
 	private Person person;
 	
@@ -32,24 +35,26 @@ public class PersonResult extends Result{
 	/**The possible error message.*/
 	private String error;
 	
+//Setters
 	/**Sets the Person to be returned.
-	 * @param person		the Person to be returned*/
+	 * @param person	the Person to be returned*/
 	public void setPerson(Person person) { this.person = person; }
-	
-	/**@return			the Person to return*/
-	public Person getPerson() { return person; }
 	
 	/**Sets the data to be returned.
 	 * @param data		the Person array to be returned*/
 	public void setData(Person[] data) { this.data = data; }
 	
-	/**@return			the Person array data*/
-	public Person[] getData() { return data; }
-	
 	/**Sets the error message where applicable.
-	 * @param error				the error message*/
+	 * @param error		the error message*/
 	public void setError(String error) { this.error = error; }
 	
-	/**@return					the error message*/
+//Getters
+	/**@return the Person to return*/
+	public Person getPerson() { return person; }
+	
+	/**@return the Person array data*/
+	public Person[] getData() { return data; }
+	
+	/**@return the error message*/
 	public String getError() { return error; }
 }

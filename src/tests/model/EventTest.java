@@ -12,12 +12,10 @@ public class EventTest {
 	private Event e = null;
 	
 	@Before
-	public void setUp() throws Exception { e = new Event(); }
+	public void setUp() { e = new Event(); }
 
 	@After
-	public void tearDown() throws Exception {
-		e = null;
-	}
+	public void tearDown() { e = null; }
 
 	@Test
 	public void testEventID() { e.setEventID("1234"); assertEquals("1234", e.getEventID()); }

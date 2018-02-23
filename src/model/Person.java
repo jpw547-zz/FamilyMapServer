@@ -4,20 +4,32 @@ package model;
  * 
  * @author John Werner*/
 public class Person {
+	
+//Constructors
 	/** The general constructor for a Person object.*/
 	public Person() {}
 	
-	public Person(String p, String f, String l, char g, String d, String father, String mother, String spouse) {
-		setPersonID(p);
-		setFirstName(f);
-		setLastName(l);
-		setGender(g);
-		setDescendant(d);
+	/**The constructor for initializing the attributes of a Person.
+	 * @param personID		the personID
+	 * @param firstName		the person's first name
+	 * @param lastName		the person's last name
+	 * @param gender		the person's gender
+	 * @param descendant	the descendant of the person's userName
+	 * @param father		the person's father (if applicable/known)
+	 * @param mother		the person's mother (if applicable/known)
+	 * @param spouse		the person's spouse (if applicable/known)*/
+	public Person(String personID, String firstName, String lastName, char gender, String descendant, String father, String mother, String spouse) {
+		setPersonID(personID);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setGender(gender);
+		setDescendant(descendant);
 		setFather(father);
 		setMother(mother);
 		setSpouse(spouse);
 	}
 	
+//Data members
 	/** A unique identifier for the Person object.*/
 	private String personID; // Person’s unique ID
 	
@@ -42,60 +54,61 @@ public class Person {
 	/** The identifier of the Person object that represents this Person object's spouse in the family tree, if applicable.*/
 	private String spouse; // ID of person’s spouse [OPTIONAL, can be missing]
 	
-	
-	/** @return the Person's unique identifier*/
-	public String getPersonID() { return personID; }
-	
+//Setters
 	/** Sets the Person object's unique identifier.
 	 * @param personID a string of letters and numbers to identify the Person.*/
 	public void setPersonID(String personID) { this.personID = personID; }
 	
-	/** @return the Person's first name*/
-	public String getFirstName() { return firstName; }
-	
 	/** Sets the Person object's first name.
 	 * @param firstName the desired first name*/
 	public void setFirstName(String firstName) { this.firstName = firstName; }
-	
-	/** @return the Person's last name*/
-	public String getLastName() { return lastName; }
-	
+
 	/** Sets the Person object's last name.
 	 * @param lastName the desired last name*/
 	public void setLastName(String lastName) { this.lastName = lastName; }
-	
-	/** @return the Person's gender*/
-	public char getGender() { return gender; }
 	
 	/** Sets the Person object's gender
 	 * @param gender the Person's gender, either M or F*/
 	public void setGender(char gender) { this.gender = gender; }
 	
-	/** @return the Person's descendant*/
-	public String getDescendant() { return descendant; }
-	
 	/** Sets the Person object's descendant
 	 * @param descendant the userName of the root of the Person's family tree*/
 	public void setDescendant(String descendant) { this.descendant = descendant; }
-	
-	/** @return the Person's father's personID, and <code>null</code> if empty*/
-	public String getFather() { return father; }
 	
 	/** Sets the Person object's father's personID. This doesn't create a new Person object, but just connects two existing Person objects.
 	 * @param father the personID of the Person object that is the father of this Person object*/
 	public void setFather(String father) { this.father = father; }
 	
-	/** @return the Person's mother's personID, and <code>null</code> if empty*/
-	public String getMother() { return mother; }
-	
 	/** Sets the Person object's mother's personID. This doesn't create a new Person object, but just connects two existing Person objects.
 	 * @param mother the personID of the Person object that is the mother of this Person object*/
 	public void setMother(String mother) { this.mother = mother; }
 	
-	/** @return the Person's spouse's personID, and <code>null</code> if empty*/
-	public String getSpouse() { return spouse; }
-	
 	/** Sets the Person object's spouse's personID. This doesn't create a new Person object, but just connects two existing Person objects.
 	 * @param spouse the personID of the Person object that is the spouse of this Person object*/
 	public void setSpouse(String spouse) { this.spouse = spouse; }
+	
+//Getters
+	/** @return the Person's unique identifier*/
+	public String getPersonID() { return personID; }
+	
+	/** @return the Person's first name*/
+	public String getFirstName() { return firstName; }
+	
+	/** @return the Person's last name*/
+	public String getLastName() { return lastName; }
+	
+	/** @return the Person's gender*/
+	public char getGender() { return gender; }
+	
+	/** @return the Person's descendant*/
+	public String getDescendant() { return descendant; }
+	
+	/** @return the Person's father's personID, and <code>null</code> if empty*/
+	public String getFather() { return father; }
+	
+	/** @return the Person's mother's personID, and <code>null</code> if empty*/
+	public String getMother() { return mother; }
+	
+	/** @return the Person's spouse's personID, and <code>null</code> if empty*/
+	public String getSpouse() { return spouse; }
 }

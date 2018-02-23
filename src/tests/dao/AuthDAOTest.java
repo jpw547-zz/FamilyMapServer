@@ -39,7 +39,7 @@ public class AuthDAOTest {
 			AuthToken b = ad.getAuthToken(a.getAuthTokenID());
 			assertEquals(a.getAuthTokenID(), b.getAuthTokenID());
 			assertEquals(a.getUserName(), b.getUserName());
-			assertEquals(a.getPersonId(), b.getPersonId());
+			assertEquals(a.getPersonID(), b.getPersonID());
 		} catch (DatabaseException e) {
 			fail("testAddAuthToken failed.");
 		}
@@ -69,7 +69,5 @@ public class AuthDAOTest {
 		} catch (DatabaseException e) {
 			fail("testDeleteAll failed.");
 		}
-		
-		//fail("testDeleteAll failed.");
 	}
 }
