@@ -152,7 +152,11 @@ public class UserDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				stmt.executeUpdate();
+				int deleted = stmt.executeUpdate();
+				if(deleted == 0) { 
+					//System.out.println("No Users to delete.");
+					return; 
+				}
 			}
 			finally {
 				if(stmt != null) {
@@ -161,6 +165,7 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException err) {
+			System.out.println("Delete All Users failed.");
 			throw new DatabaseException("Delete All Users failed.", err);
 		}
 	}

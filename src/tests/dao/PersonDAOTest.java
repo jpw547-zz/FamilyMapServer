@@ -23,7 +23,7 @@ public class PersonDAOTest {
 	@After
 	public void tearDown() throws Exception {
 		pd.deleteAllPersons();
-		pd.closeConnection(true);
+		pd.closeConnection(false);
 		pd = null;
 	}
 

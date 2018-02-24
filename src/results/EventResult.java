@@ -22,7 +22,7 @@ public class EventResult extends Result{
 	/**The constructor for an error EventResult.
 	 * @param error		the error message*/
 	public EventResult(String error) {
-		setError(error);
+		setMessage(error);
 	}
 	
 //Data members
@@ -31,9 +31,6 @@ public class EventResult extends Result{
 	
 	/**The array of Events to be returned.*/
 	private Event[] data;
-	
-	/**The possible error message.*/
-	private String error;
 	
 //Setters
 	/**Sets the Event to be returned.
@@ -44,17 +41,10 @@ public class EventResult extends Result{
 	 * @param data		the Event array to be returned*/
 	public void setData(Event[] data) { this.data = data; }
 	
-	/**Sets the error message where applicable.
-	 * @param error		the error message*/
-	public void setError(String error) { this.error = error; }
-	
 //Getters
 	/**@return the Event to return*/
 	public Event getEvent() { return event; }
 	
 	/**@return the Event array data*/
 	public Event[] getData() { return data; }
-	
-	/**@return the error message*/
-	public String getError() { return error; }
 }

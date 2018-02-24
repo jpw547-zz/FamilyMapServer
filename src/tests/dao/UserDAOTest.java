@@ -24,7 +24,7 @@ public class UserDAOTest {
 	@After
 	public void tearDown() throws Exception {
 		ud.deleteAllUsers();
-		ud.closeConnection(true);
+		ud.closeConnection(false);
 		ud = null;
 	}
 

@@ -116,7 +116,11 @@ public class AuthDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No parameters to add to the statement, so proceed to execution.
-				stmt.executeUpdate();
+				int deleted = stmt.executeUpdate();
+				if(deleted == 0) { 
+					//System.out.println("No AuthTokens to delete.");
+					return; 
+				}
 			}
 			finally {
 				if(stmt != null) {
@@ -125,6 +129,7 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
+			System.out.println("Delete All AuthTokens failed.");
 			throw new DatabaseException("Delete All AuthTokens failed.", e);
 		}
 	}

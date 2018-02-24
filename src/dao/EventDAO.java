@@ -157,7 +157,11 @@ public class EventDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				stmt.executeUpdate();
+				int deleted = stmt.executeUpdate();
+				if(deleted == 0) { 
+					//System.out.println("No Events to delete.");
+					return; 
+				}
 			}
 			finally {
 				if(stmt != null) {
@@ -166,6 +170,7 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException e) {
+			System.out.println("Delete All Events failed.");
 			throw new DatabaseException("Delete All Events failed.", e);
 		}
 	}

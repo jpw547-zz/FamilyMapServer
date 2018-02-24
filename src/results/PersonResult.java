@@ -22,7 +22,7 @@ public class PersonResult extends Result{
 	/**Constructor for an error PersonResult.
 	 * @param error		the error message*/
 	public PersonResult(String error) {
-		setError(error);
+		setMessage(error);
 	}
 	
 //Data members
@@ -31,9 +31,6 @@ public class PersonResult extends Result{
 	
 	/**The array of Persons to be returned.*/
 	private Person[] data;
-	
-	/**The possible error message.*/
-	private String error;
 	
 //Setters
 	/**Sets the Person to be returned.
@@ -44,17 +41,10 @@ public class PersonResult extends Result{
 	 * @param data		the Person array to be returned*/
 	public void setData(Person[] data) { this.data = data; }
 	
-	/**Sets the error message where applicable.
-	 * @param error		the error message*/
-	public void setError(String error) { this.error = error; }
-	
 //Getters
 	/**@return the Person to return*/
 	public Person getPerson() { return person; }
 	
 	/**@return the Person array data*/
 	public Person[] getData() { return data; }
-	
-	/**@return the error message*/
-	public String getError() { return error; }
 }

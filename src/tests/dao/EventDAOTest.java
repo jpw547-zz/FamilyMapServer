@@ -22,7 +22,7 @@ public class EventDAOTest {
 
 	@After
 	public void tearDown() throws Exception {
-		ed.closeConnection(true);
+		ed.closeConnection(false);
 		ed = null;
 	}
 

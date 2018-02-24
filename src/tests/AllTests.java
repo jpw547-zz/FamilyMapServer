@@ -20,5 +20,26 @@ public class AllTests {
 	        System.out.println(failure.toString());
 	     }	
 	     if(dao.wasSuccessful()) { System.out.println("DAO tests passed."); }
+	     
+	     //Request tests
+		 Result req = JUnitCore.runClasses(tests.requests.RequestTests.class);
+	     for (Failure failure : req.getFailures()) {
+	        System.out.println(failure.toString());
+	     }	
+	     if(req.wasSuccessful()) { System.out.println("Request tests passed."); }
+	     
+	     //Result tests
+		 Result res = JUnitCore.runClasses(tests.results.ResultsTests.class);
+	     for (Failure failure : res.getFailures()) {
+	        System.out.println(failure.toString());
+	     }	
+	     if(res.wasSuccessful()) { System.out.println("Result tests passed."); }
+	     
+	     //Service tests
+		 Result service = JUnitCore.runClasses(tests.services.ServiceTests.class);
+	     for (Failure failure : service.getFailures()) {
+	        System.out.println(failure.toString());
+	     }	
+	     if(service.wasSuccessful()) { System.out.println("Service tests passed."); }
      }
 }

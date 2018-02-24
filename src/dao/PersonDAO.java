@@ -155,7 +155,11 @@ public class PersonDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				stmt.executeUpdate();
+				int deleted = stmt.executeUpdate();
+				if(deleted == 0) { 
+					//System.out.println("No Persons to delete.");
+					return; 
+				}
 			} 
 			finally {
 				if(stmt != null) {
@@ -164,6 +168,7 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException err) {
+			System.out.println("Delete All Persons failed.");
 			throw new DatabaseException("Delete All Persons failed.", err);
 		}
 	}

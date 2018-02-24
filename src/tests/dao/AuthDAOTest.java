@@ -22,7 +22,7 @@ public class AuthDAOTest {
 
 	@After
 	public void tearDown() throws Exception {
-		ad.closeConnection(true);
+		ad.closeConnection(false);
 		ad = null;
 	}
 
