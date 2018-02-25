@@ -11,18 +11,20 @@ public class User {
 	
 	/**A constructor for initializing the attributes of a User.
 	 * @param userName		the userName
-	 * @param personID		the personID associated with this User
+	 * @param password		the password associated with this User
 	 * @param email			the email address
 	 * @param firstName		the first name of the User
 	 * @param lastName		the last name of the User
-	 * @param gender		the gender of the User*/
-	public User(String userName, String personID, String email, String firstName, String lastName, char gender) {
+	 * @param gender		the gender of the User
+	 * @param personID		the id for the Person object tied to this User*/
+	public User(String userName, String password, String email, String firstName, String lastName, char gender, String personID) {
 		setUserName(userName);
-		setPassword(personID);
+		setPassword(password);
 		setEmail(email);
 		setFirstName(firstName);
 		setLastName(lastName);
 		setGender(gender);
+		setPersonID(personID);
 	}
 	
 //Data members
@@ -43,6 +45,9 @@ public class User {
 	
 	/** A char containing the user's gender, either 'M' or 'F'.*/
 	private char gender; // “f” or “m”
+	
+	/** A String containing the user's personID. Can be null, because the Person object is created afterwards.*/
+	private String personID; // Non-empty string
 	
 	
 //Setters
@@ -70,6 +75,10 @@ public class User {
 	 * @param gender the person's gender, either M or F*/
 	public void setGender(char gender) { this.gender = gender; }
 	
+	/** Sets the User object's personID that they are associated with.
+	 * @param personID the user's personID*/
+	public void setPersonID(String personID) { this.personID = personID; }
+	
 //Getters
 	/** @return the User's userName*/
 	public String getUserName() { return userName; }
@@ -88,4 +97,7 @@ public class User {
 	
 	/** @return the User's gender*/
 	public char getGender() { return gender; }
+	
+	/** @return the User's personID*/
+	public String getPersonID() { return personID; }
 }

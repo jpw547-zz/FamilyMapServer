@@ -1,4 +1,4 @@
-package tests.services;
+package tests.handlers;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -6,9 +6,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	LoginServiceTest.class,
-	ClearServiceTest.class
+	JSONConverterTest.class 
 })
-public class ServiceTests {
+public class HandlerTests {
 
 }

@@ -57,7 +57,7 @@ public class UserDAO {
 		PreparedStatement stmt = null;
 		try {
 			try {
-				String sql = "INSERT INTO Users (userName, password, email, firstName, lastName, gender) VALUES (?, ?, ?, ?, ?, ?);";
+				String sql = "INSERT INTO Users (userName, password, email, firstName, lastName, gender, personID) VALUES (?, ?, ?, ?, ?, ?, ?);";
 				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the User's parameters.
@@ -67,6 +67,7 @@ public class UserDAO {
 				stmt.setString(4, u.getFirstName());
 				stmt.setString(5, u.getLastName());
 				stmt.setString(6, String.valueOf(u.getGender()));
+				stmt.setString(7, u.getPersonID());
 				
 				//Execute the finalized statement.
 				stmt.executeUpdate();
@@ -89,7 +90,7 @@ public class UserDAO {
 		PreparedStatement stmt = null;
 		try {
 			try {
-				String sql = "UPDATE Users SET password=?, email=?, firstName=?, lastName=?, gender=? WHERE userName=?;";
+				String sql = "UPDATE Users SET password=?, email=?, firstName=?, lastName=?, gender=?, personID=? WHERE userName=?;";
 				stmt = c.prepareStatement(sql);
 				
 				//Fill statement with the User's parameters.
@@ -98,7 +99,8 @@ public class UserDAO {
 				stmt.setString(3, u.getFirstName());
 				stmt.setString(4, u.getLastName());
 				stmt.setString(5, String.valueOf(u.getGender()));
-				stmt.setString(6, u.getUserName());
+				stmt.setString(6, u.getPersonID());
+				stmt.setString(7, u.getUserName());
 				
 				//Execute the finalized statement.
 				stmt.executeUpdate();
@@ -186,14 +188,14 @@ public class UserDAO {
 				
 				//Execute the finalized query, and construct a User object using the data from the ResultSet.
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
 				return new User(
 						rs.getString("userName"), 
 						rs.getString("password"), 
 						rs.getString("email"), 
 						rs.getString("firstName"),
 						rs.getString("lastName"),
-						rs.getString("gender").charAt(0)
+						rs.getString("gender").charAt(0),
+						rs.getString("personID")
 						);
 			}
 			finally {
@@ -230,7 +232,8 @@ public class UserDAO {
 					String f = rs.getString("firstName");
 					String l = rs.getString("lastName");
 					char g = rs.getString("gender").charAt(0);
-					all.add(new User(u, p, e, f, l, g));
+					String id = rs.getString("personID");
+					all.add(new User(u, p, e, f, l, g, id));
 				}
 				return all;
 			}

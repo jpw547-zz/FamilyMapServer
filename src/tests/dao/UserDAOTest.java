@@ -35,7 +35,7 @@ public class UserDAOTest {
 
 	@Test
 	public void testAddUser() {
-		User a = new User("cheese", "apple", "myemail@gmail.com", "geralt", "of Rivia", 'M');
+		User a = new User("cheese", "apple", "myemail@gmail.com", "geralt", "of Rivia", 'M', "");
 		try {
 			ud.addUser(a);
 			User b = ud.getUser(a.getUserName());
@@ -52,8 +52,8 @@ public class UserDAOTest {
 	
 	@Test
 	public void testModifyUser() {
-		User a = new User("tricycle", "helloWorld", "hardyhar@myldsmail.net", "taco", "master", 'F');
-		User b = new User("tricycle", "nahnahnah", "hardyhar@myldsmail.net", "burrito", "master", 'F');
+		User a = new User("tricycle", "helloWorld", "hardyhar@myldsmail.net", "taco", "master", 'F', "");
+		User b = new User("tricycle", "nahnahnah", "hardyhar@myldsmail.net", "burrito", "master", 'F', "");
 		try {
 			ud.addUser(a);
 			ud.modifyUser(b);
@@ -71,7 +71,7 @@ public class UserDAOTest {
 	
 	@Test(expected=DatabaseException.class)
 	public void testDeleteUser() throws DatabaseException {
-		User a = new User("silverado", "apple", "myemail@gmail.com", "geralt", "of Rivia", 'M');
+		User a = new User("silverado", "apple", "myemail@gmail.com", "geralt", "of Rivia", 'M', "");
 		ud.addUser(a);
 		ud.deleteUser(a);
 		assertNotNull(ud.getUser(a.getUserName()));
@@ -80,9 +80,9 @@ public class UserDAOTest {
 	
 	@Test
 	public void testDeleteAll() {
-		User a = new User("xuther", "secret", "anemail@gmail.com", "Tom", "Jones", 'M');
-		User b = new User("mustard", "ketchup", "onion@msn.com", "Tomato", "Johnson", 'F');
-		User c = new User("cloudy", "darkness", "dragonofmist@gmail.com", "Farni", "Yokuora", 'M');
+		User a = new User("xuther", "secret", "anemail@gmail.com", "Tom", "Jones", 'M', "");
+		User b = new User("mustard", "ketchup", "onion@msn.com", "Tomato", "Johnson", 'F', "");
+		User c = new User("cloudy", "darkness", "dragonofmist@gmail.com", "Farni", "Yokuora", 'M', "");
 		
 		try {
 			ud.addUser(a);

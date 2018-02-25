@@ -41,5 +41,12 @@ public class AllTests {
 	        System.out.println(failure.toString());
 	     }	
 	     if(service.wasSuccessful()) { System.out.println("Service tests passed."); }
+	     
+	     //Handler tests
+		 Result handler = JUnitCore.runClasses(tests.handlers.HandlerTests.class);
+	     for (Failure failure : handler.getFailures()) {
+	        System.out.println(failure.toString());
+	     }	
+	     if(handler.wasSuccessful()) { System.out.println("Handler tests passed."); }
      }
 }

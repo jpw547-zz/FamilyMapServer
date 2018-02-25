@@ -31,9 +31,9 @@ public class LoadRequestTest {
 	@Test
 	public void testUserList() {
 		User[] test = {
-				new User("peter", "rock", "p@gmail.com", "Simon", "Peter", 'M'),
-				new User("james", "oldie", "ja@gmail.com", "James", "Someone", 'M'),
-				new User("john", "youngn", "jo@gmail.com", "John", "TheBeloved", 'M')
+				new User("peter", "rock", "p@gmail.com", "Simon", "Peter", 'M', ""),
+				new User("james", "oldie", "ja@gmail.com", "James", "Someone", 'M', ""),
+				new User("john", "youngn", "jo@gmail.com", "John", "TheBeloved", 'M', "")
 		};
 		lr.setUserList(test);
 		assertEquals("ja@gmail.com", lr.getUserList()[1].getEmail());
