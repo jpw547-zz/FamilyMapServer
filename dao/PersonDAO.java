@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -214,22 +215,26 @@ public class PersonDAO {
 	/**Retrieves all information for all Persons in the database.
 	 * @return 				an array of Person objects representing all the information in the Person table of the database.
 	 * @throws 				DatabaseException */
-	public Set<Person> getAllPersons(String descendant) throws DatabaseException {
+	public Person[] getAllPersons(String descendant) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "SELECT * FROM Persons WHERE descendant=?;";
 				stmt = c.prepareStatement(sql);
+				System.out.println(descendant);
 				
 				//Fill the statement with the descendant's userName.
 				stmt.setString(1, descendant);
 				
 				//Execute the finalized query.
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
+				if(rs.getFetchSize() == 0) { System.out.println("It came back as null."); return null; }
 				
 				//Iterate over the ResultSet and use the data to construct Person objects and add them to the Set.
-				Set<Person> all = new TreeSet<Person>(); 
+				//Set<Person> all = new TreeSet<Person>(); 
+				Person[] all = new Person[rs.getFetchSize()];
+				int rowCount = 0;
+				//System.out.println(String.format("CHECK FETCH SIZE: %s", rs.getFetchSize()));
 				while(rs.next()) {
 					String p = rs.getString("personID");
 					String f = rs.getString("firstName"); 
@@ -239,7 +244,8 @@ public class PersonDAO {
 					String father = rs.getString("father");
 					String mother = rs.getString("mother");
 					String spouse = rs.getString("spouse");
-					all.add(new Person(p, f, l, c, d, father, mother, spouse));
+					all[rowCount] = new Person(p, f, l, c, d, father, mother, spouse);
+					rowCount++;
 				}
 				return all;
 			}

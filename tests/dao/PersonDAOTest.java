@@ -90,7 +90,7 @@ public class PersonDAOTest {
 		try {
 			pd.addPerson(a); pd.addPerson(b); pd.addPerson(c);
 			pd.deleteAllPersons();
-			if(pd.getAllPersons("cMonster").size() > 0) {
+			if(pd.getAllPersons("cMonster").length > 0) {
 				throw new DatabaseException("getAllPersons failed.");
 			}
 		} catch (DatabaseException e) {

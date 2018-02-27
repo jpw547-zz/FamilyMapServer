@@ -5,7 +5,7 @@ public class PersonRequest {
 	
 //Constructors
 	/**The constructor for an PersonRequest.
-	 * @param auth			the AuthTokenID for the user making the request. May be <code>null</code>.
+	 * @param auth			the AuthTokenID for the user making the request.
 	 * @param person		the personID for the Person in question. May be <code>null</code>.*/
 	public PersonRequest(String auth, String person) {
 		setAuthTokenID(auth);
@@ -13,7 +13,7 @@ public class PersonRequest {
 	}
 	
 //Data members
-	/**The authorization token for the PersonRequest. May be <code>null</code>.*/
+	/**The authorization token for the PersonRequest.*/
 	private String AuthTokenID;
 	
 	/**The identifier for the Person in question. May be <code>null</code>.*/
