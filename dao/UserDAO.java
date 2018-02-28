@@ -1,8 +1,7 @@
 package dao;
 
 import java.sql.*;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.logging.*;
 
 import model.User;
 
@@ -15,50 +14,29 @@ public class UserDAO {
 	public UserDAO() {}
 	
 //Data members
-	/**The SQL Database Connection object.*/
-	private Connection c;
+	private static Logger logger;
 	
-//Setters
-	/**Establishes a connection to the SQL database.*/
-	public void setConnection() {
-		try {
-	         Class.forName("org.sqlite.JDBC");
-	         c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
-	         c.setAutoCommit(false);
-	      } catch (Exception e) {
-	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	      }
-	      //System.out.println("Opened database successfully");
-	}
+	static {
+        logger = Logger.getLogger("familymaptest");
+    }
 	
 //Getters
-	/**@return			the database Connection object*/
-	public Connection getConnection() { return c; }
+	/**@return				the database Connection object*/
+	public Connection getConnection() { return Database.getConnection(); }
 	
-//Remaining class methods.
-	/**Closes the connection to the database.
-	 * @param commit	true to commit changes, false to rollback.
-	 * @throws 			DatabaseException */
-	public void closeConnection(boolean commit) throws DatabaseException {
-		try {
-			if(commit) { c.commit(); }
-			if(!commit) { c.rollback(); }
-            c.close();
-            c = null;
-        } catch (SQLException e) {
-            throw new DatabaseException("closeConnection failed", e);
-        }
-	}
-	
+//Remaining class methods.	
 	/**Adds a User's information to the database.
 	 * @param u			the User object
 	 * @throws 			DatabaseException */
 	public void addUser(User u) throws DatabaseException {
+		//Check parameters before continuing.
+		assert u != null : "Null User. ::UD::Add";
+				
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "INSERT INTO Users (userName, password, email, firstName, lastName, gender, personID) VALUES (?, ?, ?, ?, ?, ?, ?);";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the User's parameters.
 				stmt.setString(1, u.getUserName());
@@ -70,6 +48,7 @@ public class UserDAO {
 				stmt.setString(7, u.getPersonID());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Adding User");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -79,7 +58,7 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Add User failed.", e);
+			throw new DatabaseException(String.format("Add User failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -87,11 +66,14 @@ public class UserDAO {
 	 * @param u			the User object to be modified
 	 * @throws 			DatabaseException */
 	public void modifyUser(User u) throws DatabaseException {
+		//Check parameters before continuing.
+		assert u != null : "Null User. ::UD::Modify";
+				
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "UPDATE Users SET password=?, email=?, firstName=?, lastName=?, gender=?, personID=? WHERE userName=?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill statement with the User's parameters.
 				stmt.setString(1, u.getPassword());
@@ -103,6 +85,7 @@ public class UserDAO {
 				stmt.setString(7, u.getUserName());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Modifying User");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -111,8 +94,8 @@ public class UserDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException err) {
-			throw new DatabaseException("Modify User failed.", err);
+		} catch (SQLException e) {
+			throw new DatabaseException(String.format("Modify User failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -120,16 +103,20 @@ public class UserDAO {
 	 * @param u			the User object to be removed
 	 * @throws 			DatabaseException */
 	public void deleteUser(User u) throws DatabaseException {
+		//Check parameters before continuing.
+		assert u != null : "Null User. ::UD::Delete";
+	
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "DELETE FROM Users WHERE userName=?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill statement with the User's userName.
 				stmt.setString(1, u.getUserName());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Deleting User");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -138,8 +125,8 @@ public class UserDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException err) {
-			throw new DatabaseException("Delete User failed.", err);
+		} catch (SQLException e) {
+			throw new DatabaseException(String.format("Delete User failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 		
 	}
@@ -151,14 +138,11 @@ public class UserDAO {
 		try {
 			try {
 				String sql = "DELETE FROM Users;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				int deleted = stmt.executeUpdate();
-				if(deleted == 0) { 
-					//System.out.println("No Users to delete.");
-					return; 
-				}
+				logger.log(Level.FINE, "Deleting all Users");
+				stmt.executeUpdate();
 			}
 			finally {
 				if(stmt != null) {
@@ -166,9 +150,8 @@ public class UserDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException err) {
-			System.out.println("Delete All Users failed.");
-			throw new DatabaseException("Delete All Users failed.", err);
+		} catch (SQLException e) {
+			throw new DatabaseException(String.format("Delete all Users failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -181,12 +164,13 @@ public class UserDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM Users WHERE userName = ?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill statement with the given userName.
 				stmt.setString(1, userName);
 				
 				//Execute the finalized query, and construct a User object using the data from the ResultSet.
+				logger.log(Level.FINE, "Getting User");
 				ResultSet rs = stmt.executeQuery();
 				return new User(
 						rs.getString("userName"), 
@@ -205,26 +189,27 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Get User failed.", e);
+			throw new DatabaseException(String.format("Get User failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Retrieves all information for all Persons in the database.
 	 * @return 			an array of User objects representing all the information in the User table of the database.
 	 * @throws 			DatabaseException */
-	public Set<User> getAllUsers() throws DatabaseException {
+	public User[] getAllUsers() throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "SELECT * FROM Users;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
+				logger.log(Level.FINE, "Getting all Users");
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
 				
 				//Iterate through the ResultSet and use the data to build User objects to add to the Set.
-				Set<User> all = new TreeSet<User>();
+				User[] all = new User[rs.getFetchSize()];
+				int rowCount = 0;
 				while(rs.next()) {
 					String u = rs.getString("userName");
 					String p = rs.getString("password");
@@ -233,7 +218,8 @@ public class UserDAO {
 					String l = rs.getString("lastName");
 					char g = rs.getString("gender").charAt(0);
 					String id = rs.getString("personID");
-					all.add(new User(u, p, e, f, l, g, id));
+					all[rowCount] = new User(u, p, e, f, l, g, id);
+					rowCount++;
 				}
 				return all;
 			}
@@ -244,7 +230,7 @@ public class UserDAO {
 				}
 			}
 		} catch(SQLException e) {
-			throw new DatabaseException("Get All Users failed.", e);
+			throw new DatabaseException(String.format("Get All Users failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 }

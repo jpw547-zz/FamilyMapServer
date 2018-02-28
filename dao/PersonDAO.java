@@ -1,9 +1,7 @@
 package dao;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.logging.*;
 
 import model.Person;
 
@@ -16,41 +14,17 @@ public class PersonDAO {
 	public PersonDAO() {}
 
 //Data members
-	/**The SQL Database Connection object.*/
-	private Connection c;
+private static Logger logger;
 	
-//Setters
-	/**Establishes a connection to the SQL database.*/
-	public void setConnection() {
-		try {
-	         Class.forName("org.sqlite.JDBC");
-	         c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
-	         c.setAutoCommit(false);
-	      } catch (Exception e) {
-	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	      }
-	      //System.out.println("Opened database successfully");
-	}
+	static {
+        logger = Logger.getLogger("familymaptest");
+    }
 	
 //Getters
 	/**@return				the database Connection object*/
-	public Connection getConnection() { return c; }
+	public Connection getConnection() { return Database.getConnection(); }
 	
 //Remaining class methods
-	/**Closes the connection to the database.
-	 * @param commit		true to commit changes, false to rollback.
-	 * @throws 				DatabaseException */
-	public void closeConnection(boolean commit) throws DatabaseException {
-		try {
-			if(commit) { c.commit(); }
-			if(!commit) { c.rollback(); }
-            c.close();
-            c = null;
-        } catch (SQLException e) {
-            throw new DatabaseException("closeConnection failed", e);
-        }
-	}
-	
 	/**Adds a Person's information to the database.
 	 * @param p				the Person object
 	 * @throws 				DatabaseException */
@@ -59,7 +33,7 @@ public class PersonDAO {
 		try {
 			try {
 				String sql = "INSERT INTO Persons (personID, firstName, lastName, gender, descendant, father, mother, spouse) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the Person parameters.
 				stmt.setString(1, p.getPersonID());
@@ -72,6 +46,7 @@ public class PersonDAO {
 				stmt.setString(8, p.getSpouse());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Adding Person");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -80,8 +55,8 @@ public class PersonDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException err) {
-			throw new DatabaseException("Add Person failed.", err);
+		} catch (SQLException e) {
+			throw new DatabaseException(String.format("Add Person failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -93,7 +68,7 @@ public class PersonDAO {
 		try {
 			try {
 				String sql = "UPDATE Persons SET firstName=?, lastName=?, gender=?, descendant=?, father=?, mother=?, spouse=? WHERE personID=?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the Person parameters.
 				stmt.setString(1, p.getFirstName());
@@ -106,6 +81,7 @@ public class PersonDAO {
 				stmt.setString(8, p.getPersonID());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Modifying Person");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -114,8 +90,8 @@ public class PersonDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException err) {
-			throw new DatabaseException("Modify Person failed.", err);
+		} catch (SQLException e) {
+			throw new DatabaseException(String.format("Modify Person failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -127,12 +103,13 @@ public class PersonDAO {
 		try {
 			try {
 				String sql = "DELETE FROM Persons WHERE personID = ?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the Person's personID.
 				stmt.setString(1, p.getPersonID());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Deleting Person");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -141,8 +118,8 @@ public class PersonDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException err) {
-			throw new DatabaseException("Delete Person failed.", err);
+		} catch (SQLException e) {
+			throw new DatabaseException(String.format("Delete Person failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -153,14 +130,11 @@ public class PersonDAO {
 		try {
 			try {
 				String sql = "DELETE FROM Persons;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				int deleted = stmt.executeUpdate();
-				if(deleted == 0) { 
-					//System.out.println("No Persons to delete.");
-					return; 
-				}
+				logger.log(Level.FINE, "Deleting all Persons");
+				stmt.executeUpdate();
 			} 
 			finally {
 				if(stmt != null) {
@@ -168,9 +142,8 @@ public class PersonDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException err) {
-			System.out.println("Delete All Persons failed.");
-			throw new DatabaseException("Delete All Persons failed.", err);
+		} catch (SQLException e) {
+			throw new DatabaseException(String.format("Delete all Persons failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -183,14 +156,14 @@ public class PersonDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM Persons WHERE personID = ?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the given personID.
 				stmt.setString(1, personID);
 				
 				//Execute the query, and construct a new Person object from the data in the ResultSet.
+				logger.log(Level.FINE, "Getting Person");
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
 				return new Person( 
 						rs.getString("personID"), 
 						rs.getString("firstName"), 
@@ -208,7 +181,7 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Get Person failed.", e);
+			throw new DatabaseException(String.format("Get Person failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -220,21 +193,18 @@ public class PersonDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM Persons WHERE descendant=?;";
-				stmt = c.prepareStatement(sql);
-				System.out.println(descendant);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the descendant's userName.
 				stmt.setString(1, descendant);
 				
 				//Execute the finalized query.
+				logger.log(Level.FINE, "Getting all Persons");
 				ResultSet rs = stmt.executeQuery();
-				if(rs.getFetchSize() == 0) { System.out.println("It came back as null."); return null; }
 				
 				//Iterate over the ResultSet and use the data to construct Person objects and add them to the Set.
-				//Set<Person> all = new TreeSet<Person>(); 
 				Person[] all = new Person[rs.getFetchSize()];
 				int rowCount = 0;
-				//System.out.println(String.format("CHECK FETCH SIZE: %s", rs.getFetchSize()));
 				while(rs.next()) {
 					String p = rs.getString("personID");
 					String f = rs.getString("firstName"); 
@@ -256,7 +226,7 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Get All Persons failed.", e);
+			throw new DatabaseException(String.format("Get All Persons failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}
 }

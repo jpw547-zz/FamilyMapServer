@@ -3,6 +3,8 @@ package dao;
 import java.sql.*;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import model.Event;
 
@@ -15,41 +17,17 @@ public class EventDAO {
 	public EventDAO() {}
 	
 //Data members
-	/**The SQL Database Connection object.*/
-	private Connection c;
+private static Logger logger;
 	
-//Setters
-	/**Establishes a connection to the SQL database.*/
-	public void setConnection() {
-		try {
-	         Class.forName("org.sqlite.JDBC");
-	         c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
-	         c.setAutoCommit(false);
-	      } catch (Exception e) {
-	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	      }
-	      //System.out.println("Opened database successfully");
-	}
+	static {
+        logger = Logger.getLogger("familymaptest");
+    }
 	
 //Getters
 	/**@return				the database Connection object*/
-	public Connection getConnection() { return c; }
+	public Connection getConnection() { return Database.getConnection(); }
 	
-//Remaining class methods
-	/**Closes the connection to the database.
-	 * @param commit		true to commit changes, false to rollback.
-	 * @throws 				DatabaseException */
-	public void closeConnection(boolean commit) throws DatabaseException {
-		try {
-			if(commit) { c.commit(); }
-			if(!commit) { c.rollback(); }
-            c.close();
-            c = null;
-        } catch (SQLException e) {
-            throw new DatabaseException("closeConnection failed", e);
-        }
-	}
-	
+//Remaining class methods	
 	/**Adds an Event's information to the database.
 	 * @param e				the Event object
 	 * @throws				DatabaseException*/
@@ -58,7 +36,7 @@ public class EventDAO {
 		try {
 			try {
 				String sql = "INSERT INTO Events (eventID, personID, descendant, latitude, longitude, country, city, eventType, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the Event parameters.
 				stmt.setString(1, e.getEventID());
@@ -72,6 +50,7 @@ public class EventDAO {
 				stmt.setString(9, e.getYear());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Adding Event");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -81,7 +60,7 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException("Add Event failed.", err);
+			throw new DatabaseException(String.format("Add Event failed. : %s ::UD", err.getLocalizedMessage()));
 		}
 	}
 	
@@ -93,7 +72,7 @@ public class EventDAO {
 		try {
 			try {
 				String sql = "UPDATE Events SET personID=?, descendant=?, latitude=?, longitude=?, country=?, city=?, eventType=?, year=? WHERE eventID=?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the Event parameters.
 				stmt.setString(1, e.getPersonID());
@@ -107,6 +86,7 @@ public class EventDAO {
 				stmt.setString(9, e.getEventID());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Modifying Event");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -116,7 +96,7 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException("Modify Event failed.", err);
+			throw new DatabaseException(String.format("Modify Event failed. : %s ::UD", err.getLocalizedMessage()));
 		}
 	}
 	
@@ -128,12 +108,13 @@ public class EventDAO {
 		try {
 			try {
 				String sql = "DELETE FROM Events WHERE eventID = ?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with eventID.
 				stmt.setString(1, e.getEventID());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Deleting Event");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -143,7 +124,7 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException("Delete Event failed.", err);
+			throw new DatabaseException(String.format("Delete Event failed. : %s ::UD", err.getLocalizedMessage()));
 		}
 	}
 	
@@ -154,14 +135,11 @@ public class EventDAO {
 		try {
 			try {
 				String sql = "DELETE FROM Events;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				int deleted = stmt.executeUpdate();
-				if(deleted == 0) { 
-					//System.out.println("No Events to delete.");
-					return; 
-				}
+				logger.log(Level.FINE, "Deleting all Events");
+				stmt.executeUpdate();
 			}
 			finally {
 				if(stmt != null) {
@@ -169,9 +147,9 @@ public class EventDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException e) {
+		} catch (SQLException err) {
 			System.out.println("Delete All Events failed.");
-			throw new DatabaseException("Delete All Events failed.", e);
+			throw new DatabaseException(String.format("Delete all Events failed. : %s ::UD", err.getLocalizedMessage()));
 		}
 	}
 	
@@ -184,14 +162,14 @@ public class EventDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM Events WHERE eventID = ?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill the statement with the given eventID.
 				stmt.setString(1, eventID);
 				
 				//Execute the query, and construct the Event from the information in the ResultSet.
+				logger.log(Level.FINE, "Getting Event");
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
 				return new Event(
 						rs.getString("eventID"), 
 						rs.getString("personID"), 
@@ -209,8 +187,8 @@ public class EventDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException e) {
-			throw new DatabaseException("Get Event failed.", e);
+		} catch (SQLException err) {
+			throw new DatabaseException(String.format("Get Event failed. : %s ::UD", err.getLocalizedMessage()));
 		}
 	}
 	
@@ -222,14 +200,14 @@ public class EventDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM Events WHERE descendant=?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
-				//Fill the statement with the descendant's userName.
+				//Fill the statement with the descendant's userNamerr.
 				stmt.setString(1, descendant);
 				
 				//Execute the finalized query.
+				logger.log(Level.FINE, "Getting all Events");
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
 				
 				//Iterate over the ResultSet to construct Event objects and add them to the Set to be returned.
 				Set<Event> all = new TreeSet<Event>(); 
@@ -253,8 +231,8 @@ public class EventDAO {
 					stmt = null;
 				}
 			}
-		} catch (SQLException e) {
-			throw new DatabaseException("Get All Events failed.", e);
+		} catch (SQLException err) {
+			throw new DatabaseException(String.format("Get All Events failed. : %s ::UD", err.getLocalizedMessage()));
 		}
 	}
 }

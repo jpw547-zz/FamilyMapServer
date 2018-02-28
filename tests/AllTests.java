@@ -1,11 +1,45 @@
 package tests;
 
+import java.io.IOException;
+import java.util.logging.*;
+
 import org.junit.runner.*;
 import org.junit.runner.notification.Failure;
 
 
 
 public class AllTests {
+	  private static Logger logger;
+
+	    static {
+	        try {
+	            initLog();
+	        }
+	        catch (IOException e) {
+	            System.out.println("Could not initialize log: " + e.getMessage());
+				e.printStackTrace();
+	        }
+	    }
+		
+	    private static void initLog() throws IOException {
+
+	        Level logLevel = Level.FINEST;
+
+	        logger = Logger.getLogger("familymaptest"); 
+	        logger.setLevel(logLevel);
+	        logger.setUseParentHandlers(false);
+
+	        Handler consoleHandler = new ConsoleHandler();
+	        consoleHandler.setLevel(logLevel);
+	        consoleHandler.setFormatter(new SimpleFormatter());
+	        logger.addHandler(consoleHandler);
+
+	        FileHandler fileHandler = new FileHandler("testlog.txt", false);
+	        fileHandler.setLevel(logLevel);
+	        fileHandler.setFormatter(new SimpleFormatter());
+	        logger.addHandler(fileHandler);
+	    }
+	    
 	 public static void main(String[] args) {
 		 //Model tests
 		 Result model = JUnitCore.runClasses(tests.model.ModelTests.class);

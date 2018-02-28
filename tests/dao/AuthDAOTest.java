@@ -8,22 +8,23 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dao.AuthDAO;
-import dao.DatabaseException;
+import dao.*;
 
 public class AuthDAOTest {
-	private AuthDAO ad = null;
+	private AuthDAO ad;
+	private Database db;
 
 	@Before
-	public void setUp() throws Exception {
-		ad = new AuthDAO();
-		ad.setConnection();
+	public void setUp() {
+		db = new Database();
+		ad = db.getAD();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		ad.closeConnection(false);
+		db.closeConnection(false);
 		ad = null;
+		db = null;
 	}
 
 	@Test
@@ -63,7 +64,7 @@ public class AuthDAOTest {
 		ad.addAuthToken(a); ad.addAuthToken(b); ad.addAuthToken(c);
 		try {
 			ad.deleteAllAuthTokens();
-			if(ad.getAllAuthTokens().size() > 0) {
+			if(ad.getAllAuthTokens().length > 0) {
 				throw new DatabaseException("getAllTokens failed.");
 			}
 		} catch (DatabaseException e) {

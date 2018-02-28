@@ -8,24 +8,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.Database;
 import dao.DatabaseException;
 import dao.UserDAO;
 
 public class UserDAOTest {
-
 	private UserDAO ud;
+	private Database db;
 
 	@Before
 	public void setUp() throws Exception {
-		ud = new UserDAO();
-		ud.setConnection();
+		db = new Database();
+		ud = db.getUD();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		ud.deleteAllUsers();
-		ud.closeConnection(false);
+		db.closeConnection(false);
 		ud = null;
+		db = null;
 	}
 
 	@Test
@@ -89,7 +90,7 @@ public class UserDAOTest {
 			ud.addUser(b);
 			ud.addUser(c);
 			ud.deleteAllUsers();
-			if(ud.getAllUsers().size() > 0) {
+			if(ud.getAllUsers().length > 0) {
 				throw new DatabaseException("getAllUsers failed.");
 			}
 		} catch(DatabaseException e) {

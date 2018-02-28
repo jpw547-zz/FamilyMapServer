@@ -8,23 +8,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.Database;
 import dao.DatabaseException;
 import dao.PersonDAO;
 
 public class PersonDAOTest {
-	private PersonDAO pd = null;
+	private PersonDAO pd;
+	private Database db;
 
 	@Before
 	public void setUp() throws Exception {
-		pd = new PersonDAO();
-		pd.setConnection();
+		db = new Database();
+		pd = db.getPD();;
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		pd.deleteAllPersons();
-		pd.closeConnection(false);
+		db.closeConnection(false);
 		pd = null;
+		db = null;
 	}
 
 	@Test

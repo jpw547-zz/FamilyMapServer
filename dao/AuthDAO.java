@@ -1,8 +1,8 @@
 package dao;
 
 import java.sql.*;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import model.AuthToken;
 
@@ -15,50 +15,29 @@ public class AuthDAO {
 	public AuthDAO() {}
 	
 //Data members
-	/**The SQL Database Connection object.*/
-	private Connection c;
+	private static Logger logger;
 	
-//Setters
-	/**Establishes a connection to the SQL database.*/
-	public void setConnection() {
-		try {
-	         Class.forName("org.sqlite.JDBC");
-	         c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
-	         c.setAutoCommit(false);
-	      } catch (Exception e) {
-	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	      }
-	      //System.out.println("Opened database successfully");
-	}
+	static {
+        logger = Logger.getLogger("familymaptest");
+    }
 	
 //Getters
-	/**@return		the database Connection object*/
-	public Connection getConnection() { return c; }
+	/**@return				the database Connection object*/
+	public Connection getConnection() { return Database.getConnection(); }
 	
 //Remaining class methods
-	/**Closes the connection to the database.
-	 * @param commit	true to commit changes, false to rollback.
-	 * @throws 			DatabaseException */
-	public void closeConnection(boolean commit) throws DatabaseException {
-		try {
-			if(commit) { c.commit(); }
-			if(!commit) { c.rollback(); }
-            c.close();
-            c = null;
-        } catch (SQLException e) {
-            throw new DatabaseException("closeConnection failed", e);
-        }
-	}
-	
 	/**Adds an AuthToken's information to the database.
 	 * @param a			the AuthToken object
 	 * @throws 			DatabaseException */
 	public void addAuthToken(AuthToken a) throws DatabaseException {
+		//Check parameters before continuing.
+		assert a != null : "Null AuthToken. ::AD::Add";
+		
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "INSERT INTO AuthTokens (tokenID, userName, personID) VALUES (?, ?, ?);";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill statement with the AuthToken parameters.
 				stmt.setString(1, a.getAuthTokenID());
@@ -66,6 +45,7 @@ public class AuthDAO {
 				stmt.setString(3, a.getPersonID());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Adding AuthToken");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -75,7 +55,7 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Add AuthToken failed.", e);
+			throw new DatabaseException(String.format("Add AuthToken failed. : %s ::AD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -83,16 +63,20 @@ public class AuthDAO {
 	 * @param a			the AuthToken object to be removed
 	 * @throws 			DatabaseException */
 	public void deleteAuthToken(AuthToken a) throws DatabaseException {
+		//Check parameters before continuing.
+		assert a != null : "Null AuthToken. ::AD::Delete";
+				
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "DELETE FROM AuthTokens WHERE tokenID = ?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill statement with the AuthTokenID.
 				stmt.setString(1, a.getAuthTokenID());
 				
 				//Execute the finalized statement.
+				logger.log(Level.FINE, "Deleting AuthToken");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -102,7 +86,7 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Delete AuthToken failed.", e);
+			throw new DatabaseException(String.format("Delete AuthToken failed. : %s ::AD", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -113,14 +97,11 @@ public class AuthDAO {
 		try {
 			try {
 				String sql = "DELETE FROM AuthTokens;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//No parameters to add to the statement, so proceed to execution.
-				int deleted = stmt.executeUpdate();
-				if(deleted == 0) { 
-					//System.out.println("No AuthTokens to delete.");
-					return; 
-				}
+				logger.log(Level.FINE, "Deleting all AuthTokens.");
+				stmt.executeUpdate();
 			}
 			finally {
 				if(stmt != null) {
@@ -129,28 +110,30 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Delete All AuthTokens failed.");
-			throw new DatabaseException("Delete All AuthTokens failed.", e);
+			throw new DatabaseException(String.format("Delete All AuthTokens failed. : %s ::AD", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Retrieves the information for an AuthToken in the database.
-	 * @param authID	the identifier for the AuthToken to be returned
-	 * @return			an AuthToken object representing the information in the database.
-	 * @throws			DatabaseException */
+	 * @param authID				the identifier for the AuthToken to be returned
+	 * @return						an AuthToken object representing the information in the database.
+	 * @throws DatabaseException 	if it is unable to get an AuthToken*/
 	public AuthToken getAuthToken(String authID) throws DatabaseException {
+		//Check parameters before continuing.
+		assert !authID.equals("") : "Empty authID. ::AD::Get";
+		
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "SELECT * FROM AuthTokens WHERE tokenID = ?;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//Fill statement with the given authID.
 				stmt.setString(1, authID);
 				
 				//Execute the query and add the values to a new object to be returned.
+				logger.log(Level.FINE, "Getting AuthToken.");
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
 				return new AuthToken(rs.getString("tokenID"), rs.getString("userName"), rs.getString("personID"));
 			}
 			finally {
@@ -160,31 +143,33 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Get AuthToken failed.", e);
+			throw new DatabaseException(String.format("Get AuthToken failed. : %s ::AD", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Retrieves all information for all AuthTokens in the database.
-	 * @return 			an array of AuthToken objects representing all the information in the AuthToken table of the database.
-	 * @throws 			DatabaseException */
-	public Set<AuthToken> getAllAuthTokens() throws DatabaseException {
+	 * @return 						an array of AuthToken objects representing all the information in the AuthToken table of the database.
+	 * @throws DatabaseException	if unable to get any AuthTokens */
+	public AuthToken[] getAllAuthTokens() throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
 				String sql = "SELECT * FROM AuthTokens;";
-				stmt = c.prepareStatement(sql);
+				stmt = getConnection().prepareStatement(sql);
 				
 				//No additional parameters to add, so we execute the query.
+				logger.log(Level.FINE, "Getting all AuthTokens.");
 				ResultSet rs = stmt.executeQuery();
-				if(rs == null) { return null; }
 				
 				//Iterate through the ResultSet and create new AuthTokens to be returned in the final Set.
-				Set<AuthToken> all = new TreeSet<AuthToken>(); 
+				AuthToken[] all = new AuthToken[rs.getFetchSize()];
+				int rowCount = 0;
 				while(rs.next()) {
 					String id = rs.getString("tokenID");
 					String user = rs.getString("userName");
 					String person = rs.getString("personID");
-					all.add(new AuthToken(id, user, person));
+					all[rowCount] = new AuthToken(id, user, person);
+					rowCount++;
 				}
 				return all;
 			}
@@ -195,7 +180,7 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Get AuthToken failed.", e);
+			throw new DatabaseException(String.format("Get All AuthTokens failed. : %s ::AD", e.getLocalizedMessage()));
 		}
 	}
 }

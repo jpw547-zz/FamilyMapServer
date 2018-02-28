@@ -8,22 +8,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.Database;
 import dao.DatabaseException;
 import dao.EventDAO;
 
 public class EventDAOTest {
-	private EventDAO ed = null;
+	private EventDAO ed;
+	private Database db;
 
 	@Before
 	public void setUp() throws Exception {
-		ed = new EventDAO();
-		ed.setConnection();
+		db = new Database();
+		ed = db.getED();;
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		ed.closeConnection(false);
+		db.closeConnection(false);
 		ed = null;
+		db = null;
 	}
 
 	@Test
