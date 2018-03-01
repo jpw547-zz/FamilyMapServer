@@ -1,10 +1,8 @@
 package dao;
 
 import java.sql.*;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.logging.*;
 
 import model.Event;
 
@@ -202,7 +200,7 @@ public class EventDAO {
 	/**Retrieves all information for all Events in the database.
 	 * @return 				an array of Event objects representing all the information in the Event table of the database.
 	 * @throws 				DatabaseException */
-	public Set<Event> getAllEvents(String descendant) throws DatabaseException {
+	public Event[] getAllEvents(String descendant) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
 			try {
@@ -217,7 +215,7 @@ public class EventDAO {
 				ResultSet rs = stmt.executeQuery();
 				
 				//Iterate over the ResultSet to construct Event objects and add them to the Set to be returned.
-				Set<Event> all = new TreeSet<Event>(); 
+				ArrayList<Event> res = new ArrayList<Event>(); 
 				while(rs.next()) {
 					String eID = rs.getString("eventID"); 
 					String pID = rs.getString("personID"); 
@@ -228,7 +226,12 @@ public class EventDAO {
 					String city = rs.getString("city");
 					String eT = rs.getString("eventType");
 					String year = rs.getString("year");
-					all.add(new Event(eID, pID, desc, lati, longi, country, city, eT, year));
+					res.add(new Event(eID, pID, desc, lati, longi, country, city, eT, year));
+				}
+				//For some reason it won't let me just do the toArray() function and cast as an Event[].....
+				Event[] all = new Event[res.size()];
+				for(int i = 0; i < res.size(); i++) {
+					all[i] = res.get(i);
 				}
 				return all;
 			}

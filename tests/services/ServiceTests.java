@@ -10,7 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	ClearServiceTest.class,
 	LoadServiceTest.class,
 	RegisterServiceTest.class,
-	PersonServiceTest.class
+	PersonServiceTest.class,
+	EventServiceTest.class
 })
 public class ServiceTests {
 

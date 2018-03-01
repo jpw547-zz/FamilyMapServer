@@ -211,10 +211,7 @@ public class PersonDAO {
 				ResultSet rs = stmt.executeQuery();
 				
 				//Iterate over the ResultSet and use the data to construct Person objects and add them to the Set.
-				
-				ArrayList<Person> res = new ArrayList<Person>();
-				
-				int rowCount = 0;
+				ArrayList<Person> res = new ArrayList<Person>();				
 				while(rs.next()) {
 					String p = rs.getString("personID");
 					String f = rs.getString("firstName"); 
@@ -225,8 +222,8 @@ public class PersonDAO {
 					String mother = rs.getString("mother");
 					String spouse = rs.getString("spouse");
 					res.add(new Person(p, f, l, c, d, father, mother, spouse));
-					rowCount++;
 				}
+				//For some reason it won't let me just do the toArray() function and cast as a Person[].....
 				Person[] all = new Person[res.size()];
 				for(int i = 0; i < res.size(); i++) {
 					all[i] = res.get(i);

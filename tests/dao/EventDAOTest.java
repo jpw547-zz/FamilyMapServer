@@ -94,7 +94,7 @@ public class EventDAOTest {
 		ed.addEvent(a); ed.addEvent(b); ed.addEvent(c);
 		try {
 			ed.deleteAllEvents();
-			if(ed.getAllEvents("cMonster").size() > 0) {
+			if(ed.getAllEvents("cMonster").length > 0) {
 				throw new DatabaseException("getAllEvents failed.");
 			}
 		} catch (DatabaseException e) {
