@@ -6,6 +6,7 @@ import handlers.json.JSONConverter.Names;
 import java.io.IOException;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.*;
 
 import requests.LoginRequest;
 import requests.RegisterRequest;
@@ -26,13 +27,15 @@ public class RegisterService {
 	private String[] women;
 	private String[] last;
 	
+	private static Logger logger;
+	static { logger = Logger.getLogger("familymaptest"); }
+	
 //Remaining class methods
 	/**Registers a user with with the server, and adds their information to the database.
 	 * @param rr			a RegisterRequest object with the user information.
 	 * @return				an AuthResult object with the response information.*/
 	public AuthResult register(RegisterRequest rr) {
-		UserDAO ud = new UserDAO();
-		PersonDAO pd = new PersonDAO();
+		Database db = new Database();
 		//Create a person object for the User.
 		Person p = new Person(
 				UUID.randomUUID().toString(),
@@ -46,37 +49,25 @@ public class RegisterService {
 		//Create a new User object to be registered.
 		User newguy = new User(rr.getUserName(), rr.getPassword(), rr.getEmail(), rr.getFirstName(), rr.getLastName(), rr.getGender(), p.getPersonID());
 		try {
-			ud.setConnection();
 			//The database will throw an exception if the userName is not unique.
-			ud.addUser(newguy);
-			ud.closeConnection(true);
+			db.getUD().addUser(newguy);
+			db.getPD().addPerson(p);
 			
+			GenerateDefaultAncestors(p, db);
 			
-			pd.setConnection();
-			pd.addPerson(p);
-			pd.closeConnection(true);
-			
-			GenerateDefaultAncestors(p);
+			db.closeConnection(true);
+			logger.log(Level.FINE, "User added and generations created.");
 			
 			LoginService ls = new LoginService();
 			return ls.login(new LoginRequest(rr.getUserName(), rr.getPassword()));
 		} catch (DatabaseException de) {
-			try {
-				if(ud.getConnection() != null) {
-					ud.closeConnection(false);
-				}
-				if(pd.getConnection() != null) {
-					pd.closeConnection(false);
-				}
-			} catch (DatabaseException close) {
-				close.printStackTrace();
-				return new AuthResult("Failed to add, and failed to close. ::Register::");
-			}
-			return new AuthResult("Failed to add user. ::Register::");
+			db.closeConnection(false);
+			logger.log(Level.SEVERE, String.format("Failed to register : %s", de.getLocalizedMessage()));
+			return new AuthResult(String.format("Failed to register : %s", de.getLocalizedMessage()));
 		}
 	}
 	
-	private void GenerateDefaultAncestors(Person start) {
+	private void GenerateDefaultAncestors(Person start, Database db) {
 		JSONConverter j = new JSONConverter();
 		try {
 			//Get the list of possible names for the Persons we will generate.
@@ -84,13 +75,13 @@ public class RegisterService {
 			women = j.GetNames(Names.FEMALE);
 			last = j.GetNames(Names.SURNAME);
 		} catch (IOException io) {
-			io.printStackTrace();
+			logger.log(Level.SEVERE, io.getLocalizedMessage());
 		}
 		
-		AddNewGeneration(1, start);
+		AddNewGeneration(1, start, db);
 	}
 	
-	private void AddNewGeneration(int gen, Person child) {
+	private void AddNewGeneration(int gen, Person child, Database db) {
 		//Exit out of the function if we are past the number of generations that we should create.
 		if(gen > DEFAULT_GENERATIONS) { return; }
 		
@@ -126,27 +117,20 @@ public class RegisterService {
 				fatherID);
 		
 		//Insert these Person objects into the database.
-		PersonDAO pdao = new PersonDAO();
-		pdao.setConnection();
 		try {
 			//Update the child Person object.
-			pdao.modifyPerson(child);
+			db.getPD().modifyPerson(child);
 			//Add the father and mother
-			pdao.addPerson(father);
-			pdao.addPerson(mother);
-			pdao.closeConnection(true);
-		} catch (DatabaseException de) {
-			try {
-				pdao.closeConnection(false);
-			} catch (DatabaseException close) {
-				close.printStackTrace();
-			}
-			de.printStackTrace();
+			db.getPD().addPerson(father);
+			db.getPD().addPerson(mother);
+		} catch (DatabaseException e) {
+			db.closeConnection(false);
+			logger.log(Level.SEVERE, String.format("Failed to add generations : %s", e.getLocalizedMessage()));
 		}
 		//Increment the generation number.
 		gen++;
 		//Create a new generation based off of the father and mother.
-		AddNewGeneration(gen, father);
-		AddNewGeneration(gen, mother);
+		AddNewGeneration(gen, father, db);
+		AddNewGeneration(gen, mother, db);
 	}
 }

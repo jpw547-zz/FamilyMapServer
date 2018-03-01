@@ -14,18 +14,25 @@ public class EventDAO {
 	
 //Constructors
 	/**The general constructor for an EventDAO object.*/
-	public EventDAO() {}
+	public EventDAO(Connection c) {
+		setConnection(c);
+	}
 	
 //Data members
-private static Logger logger;
+	private static Logger logger;
 	
 	static {
         logger = Logger.getLogger("familymaptest");
     }
 	
+	private Connection c;
+	
+//Setters
+	public void setConnection(Connection c) { this.c = c; }
+	
 //Getters
 	/**@return				the database Connection object*/
-	public Connection getConnection() { return Database.getConnection(); }
+	public Connection getConnection() { return c; }
 	
 //Remaining class methods	
 	/**Adds an Event's information to the database.
@@ -36,7 +43,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "INSERT INTO Events (eventID, personID, descendant, latitude, longitude, country, city, eventType, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the Event parameters.
 				stmt.setString(1, e.getEventID());
@@ -72,7 +79,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "UPDATE Events SET personID=?, descendant=?, latitude=?, longitude=?, country=?, city=?, eventType=?, year=? WHERE eventID=?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the Event parameters.
 				stmt.setString(1, e.getPersonID());
@@ -108,7 +115,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "DELETE FROM Events WHERE eventID = ?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with eventID.
 				stmt.setString(1, e.getEventID());
@@ -135,7 +142,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "DELETE FROM Events;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
 				logger.log(Level.FINE, "Deleting all Events");
@@ -162,7 +169,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "SELECT * FROM Events WHERE eventID = ?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the given eventID.
 				stmt.setString(1, eventID);
@@ -200,7 +207,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "SELECT * FROM Events WHERE descendant=?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the descendant's userNamerr.
 				stmt.setString(1, descendant);

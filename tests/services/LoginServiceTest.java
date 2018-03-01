@@ -6,8 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dao.DatabaseException;
-import dao.UserDAO;
+import dao.*;
 
 import requests.LoginRequest;
 import results.AuthResult;
@@ -28,26 +27,20 @@ public class LoginServiceTest {
 
 	@Test
 	public void testLogin() {
-		LoginRequest req = new LoginRequest("cMonster", "pass");
+		LoginRequest req = new LoginRequest("dMonster", "pass");
 		AuthResult res = ls.login(req);
-		assertEquals("The user's information did not match information in the database. ::Login::", res.getMessage());
+		assertEquals("Login failed : User not registered.", res.getMessage());
 		
-		UserDAO ud = new UserDAO();
-		ud.setConnection();
+		Database db = new Database();
 		try {
-			ud.addUser(new model.User("cMonster", "pass", "clarky@apple.com", "Clark", "Green", 'M', "cani"));
-			ud.closeConnection(true);
+			db.getUD().addUser(new model.User("dMonster", "pass", "clarky@apple.com", "Clark", "Green", 'M', "cani"));
+			db.closeConnection(true);
 		} catch (DatabaseException e) {
-			try {
-				ud.closeConnection(false);
-			} catch (DatabaseException e1) {
-				System.out.println("Connection close for Login Test failed.");
-				e1.printStackTrace();
-			}
+			db.closeConnection(false);
 			System.out.println("Add for Login Test failed.");
 			e.printStackTrace();
 		}
-		LoginRequest req2 = new LoginRequest("cMonster", "pass"); 
+		LoginRequest req2 = new LoginRequest("dMonster", "pass"); 
 		AuthResult check2 = ls.login(req2);
 		if(req2.getUsername() == null) { System.out.println("REQ2"); }
 		if(check2 == null) { System.out.println("RESULT"); }

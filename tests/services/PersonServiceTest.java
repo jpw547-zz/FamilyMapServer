@@ -15,7 +15,6 @@ import services.RegisterService;
 
 public class PersonServiceTest {
 	private PersonService ps;
-	private AuthResult ar;
 	
 	@Before
 	public void setUp() {
@@ -29,8 +28,8 @@ public class PersonServiceTest {
 
 	@Test
 	public void testGetAll() {
-		RegisterRequest rr = new RegisterRequest("jpw547", "manamana", "huffle@hogwarts.com", "John", "Werner", 'M');
-		ar = new RegisterService().register(rr);
+		RegisterRequest rr = new RegisterRequest("yodamaster", "manamana", "huffle@hogwarts.com", "John", "Werner", 'M');
+		AuthResult ar = new RegisterService().register(rr);
 		
 		PersonResult pr = ps.getAll(new PersonRequest(ar.getAuthToken().getAuthTokenID(), ar.getAuthToken().getPersonID()));
 		
@@ -42,9 +41,11 @@ public class PersonServiceTest {
 
 	@Test
 	public void testGetPerson() {
+		RegisterRequest rr = new RegisterRequest("fMonster", "scribbles", "peeves@hogwarts.com", "Chuck", "Norris", 'M');
+		AuthResult ar = new RegisterService().register(rr);
 		PersonResult pr = ps.getPerson(new PersonRequest(ar.getAuthToken().getAuthTokenID(), ar.getAuthToken().getPersonID()));
 		
-		assertEquals(pr.getPerson().getFirstName(), "John");
-		assertEquals(pr.getPerson().getLastName(), "Werner");
+		assertEquals(pr.getPerson().getFirstName(), "Chuck");
+		assertEquals(pr.getPerson().getLastName(), "Norris");
 	}
 }

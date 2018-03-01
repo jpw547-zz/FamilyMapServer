@@ -12,18 +12,21 @@ public class AuthDAO {
 	
 //Constructors
 	/**The general constructor for an AuthDAO object.*/
-	public AuthDAO() {}
+	public AuthDAO(Connection c) {
+		setConnection(c);
+	}
 	
 //Data members
 	private static Logger logger;
+	static { logger = Logger.getLogger("familymaptest"); }
 	
-	static {
-        logger = Logger.getLogger("familymaptest");
-    }
+	private Connection c;
 	
+//Setters
+	public void setConnection(Connection c) { this.c = c; }
 //Getters
 	/**@return				the database Connection object*/
-	public Connection getConnection() { return Database.getConnection(); }
+	public Connection getConnection() { return c; }
 	
 //Remaining class methods
 	/**Adds an AuthToken's information to the database.
@@ -37,7 +40,7 @@ public class AuthDAO {
 		try {
 			try {
 				String sql = "INSERT INTO AuthTokens (tokenID, userName, personID) VALUES (?, ?, ?);";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill statement with the AuthToken parameters.
 				stmt.setString(1, a.getAuthTokenID());
@@ -70,7 +73,7 @@ public class AuthDAO {
 		try {
 			try {
 				String sql = "DELETE FROM AuthTokens WHERE tokenID = ?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill statement with the AuthTokenID.
 				stmt.setString(1, a.getAuthTokenID());
@@ -97,7 +100,7 @@ public class AuthDAO {
 		try {
 			try {
 				String sql = "DELETE FROM AuthTokens;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//No parameters to add to the statement, so proceed to execution.
 				logger.log(Level.FINE, "Deleting all AuthTokens.");
@@ -126,7 +129,7 @@ public class AuthDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM AuthTokens WHERE tokenID = ?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill statement with the given authID.
 				stmt.setString(1, authID);
@@ -155,7 +158,7 @@ public class AuthDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM AuthTokens;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//No additional parameters to add, so we execute the query.
 				logger.log(Level.FINE, "Getting all AuthTokens.");

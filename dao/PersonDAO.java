@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.*;
 
 import model.Person;
@@ -11,18 +12,25 @@ public class PersonDAO {
 	
 //Constructors
 	/**The general constructor for a PersonDAO object.*/
-	public PersonDAO() {}
+	public PersonDAO(Connection c) {
+		setConnection(c);
+	}
 
 //Data members
-private static Logger logger;
+	private static Logger logger;
 	
 	static {
         logger = Logger.getLogger("familymaptest");
     }
 	
+	private Connection c;
+	
+//Setters
+	public void setConnection(Connection c) { this.c = c; }
+	
 //Getters
 	/**@return				the database Connection object*/
-	public Connection getConnection() { return Database.getConnection(); }
+	public Connection getConnection() { return c; }
 	
 //Remaining class methods
 	/**Adds a Person's information to the database.
@@ -33,7 +41,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "INSERT INTO Persons (personID, firstName, lastName, gender, descendant, father, mother, spouse) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the Person parameters.
 				stmt.setString(1, p.getPersonID());
@@ -68,7 +76,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "UPDATE Persons SET firstName=?, lastName=?, gender=?, descendant=?, father=?, mother=?, spouse=? WHERE personID=?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the Person parameters.
 				stmt.setString(1, p.getFirstName());
@@ -103,7 +111,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "DELETE FROM Persons WHERE personID = ?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the Person's personID.
 				stmt.setString(1, p.getPersonID());
@@ -130,7 +138,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "DELETE FROM Persons;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
 				logger.log(Level.FINE, "Deleting all Persons");
@@ -156,7 +164,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "SELECT * FROM Persons WHERE personID = ?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the given personID.
 				stmt.setString(1, personID);
@@ -193,7 +201,7 @@ private static Logger logger;
 		try {
 			try {
 				String sql = "SELECT * FROM Persons WHERE descendant=?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the descendant's userName.
 				stmt.setString(1, descendant);
@@ -203,7 +211,9 @@ private static Logger logger;
 				ResultSet rs = stmt.executeQuery();
 				
 				//Iterate over the ResultSet and use the data to construct Person objects and add them to the Set.
-				Person[] all = new Person[rs.getFetchSize()];
+				
+				ArrayList<Person> res = new ArrayList<Person>();
+				
 				int rowCount = 0;
 				while(rs.next()) {
 					String p = rs.getString("personID");
@@ -214,8 +224,12 @@ private static Logger logger;
 					String father = rs.getString("father");
 					String mother = rs.getString("mother");
 					String spouse = rs.getString("spouse");
-					all[rowCount] = new Person(p, f, l, c, d, father, mother, spouse);
+					res.add(new Person(p, f, l, c, d, father, mother, spouse));
 					rowCount++;
+				}
+				Person[] all = new Person[res.size()];
+				for(int i = 0; i < res.size(); i++) {
+					all[i] = res.get(i);
 				}
 				return all;
 			}

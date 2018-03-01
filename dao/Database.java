@@ -9,16 +9,17 @@ public class Database {
 //Constructors
 	/**The general constructor for an AuthDAO object.*/
 	public Database() {
-		AD = new AuthDAO();
-		UD = new UserDAO();
-		PD = new PersonDAO();
-		ED = new EventDAO();
 		setConnection();
+		AD = new AuthDAO(c);
+		UD = new UserDAO(c);
+		PD = new PersonDAO(c);
+		ED = new EventDAO(c);
+		
 	}
 	
 //Data members
 	/**The SQL Database Connection object.*/
-	private static Connection c;
+	private Connection c;
 	
 	private AuthDAO AD;
 	private UserDAO UD;
@@ -55,7 +56,7 @@ public class Database {
 	
 //Getters
 	/**@return		the database Connection object*/
-	public static Connection getConnection() { return c; }
+	public Connection getConnection() { return c; }
 	
 	public AuthDAO getAD() { return AD; }
 

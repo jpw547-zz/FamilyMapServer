@@ -11,7 +11,9 @@ public class UserDAO {
 	
 //Constructors
 	/**The general constructor for a UserDAO object.*/
-	public UserDAO() {}
+	public UserDAO(Connection c) {
+		setConnection(c);
+	}
 	
 //Data members
 	private static Logger logger;
@@ -20,9 +22,13 @@ public class UserDAO {
         logger = Logger.getLogger("familymaptest");
     }
 	
+	private Connection c;
+	
+//Setters
+	public void setConnection(Connection c) { this.c = c; }
 //Getters
 	/**@return				the database Connection object*/
-	public Connection getConnection() { return Database.getConnection(); }
+	public Connection getConnection() { return c; }
 	
 //Remaining class methods.	
 	/**Adds a User's information to the database.
@@ -36,7 +42,7 @@ public class UserDAO {
 		try {
 			try {
 				String sql = "INSERT INTO Users (userName, password, email, firstName, lastName, gender, personID) VALUES (?, ?, ?, ?, ?, ?, ?);";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill the statement with the User's parameters.
 				stmt.setString(1, u.getUserName());
@@ -73,7 +79,7 @@ public class UserDAO {
 		try {
 			try {
 				String sql = "UPDATE Users SET password=?, email=?, firstName=?, lastName=?, gender=?, personID=? WHERE userName=?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill statement with the User's parameters.
 				stmt.setString(1, u.getPassword());
@@ -110,7 +116,7 @@ public class UserDAO {
 		try {
 			try {
 				String sql = "DELETE FROM Users WHERE userName=?;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//Fill statement with the User's userName.
 				stmt.setString(1, u.getUserName());
@@ -138,7 +144,7 @@ public class UserDAO {
 		try {
 			try {
 				String sql = "DELETE FROM Users;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
 				logger.log(Level.FINE, "Deleting all Users");
@@ -163,8 +169,8 @@ public class UserDAO {
 		PreparedStatement stmt = null;
 		try {
 			try {
-				String sql = "SELECT * FROM Users WHERE userName = ?;";
-				stmt = getConnection().prepareStatement(sql);
+				String sql = "SELECT * FROM Users WHERE userName=?;";
+				stmt = c.prepareStatement(sql);
 				
 				//Fill statement with the given userName.
 				stmt.setString(1, userName);
@@ -201,7 +207,7 @@ public class UserDAO {
 		try {
 			try {
 				String sql = "SELECT * FROM Users;";
-				stmt = getConnection().prepareStatement(sql);
+				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
 				logger.log(Level.FINE, "Getting all Users");
