@@ -16,6 +16,7 @@ public class ClearService {
 	/**Clears the information in the database.
 	 * @return 		a Result object with the resulting message.*/
 	public Result clear() {
+		logger.log(Level.INFO, "Starting clear service.");
 		//Create Database Access Objects.
 		Database db = new Database();
 				
@@ -37,6 +38,7 @@ public class ClearService {
 		//All deletions passed.
 		db.closeConnection(true);
 		logger.log(Level.FINE, "Clear succeeded.");
+		logger.log(Level.INFO, "Exiting clear service.");
 		return new Result("Clear succeeded.");
 	}
 }

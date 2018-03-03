@@ -6,18 +6,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import requests.PersonRequest;
-import requests.RegisterRequest;
-import results.AuthResult;
-import results.PersonResult;
-import services.PersonService;
-import services.RegisterService;
+import requests.*;
+import results.*;
+import services.*;
 
 public class PersonServiceTest {
 	private PersonService ps;
 	
 	@Before
 	public void setUp() {
+		new ClearService().clear();
 		ps = new PersonService();
 	}
 
@@ -32,10 +30,7 @@ public class PersonServiceTest {
 		AuthResult ar = new RegisterService().register(rr);
 		
 		PersonResult pr = ps.getAll(new PersonRequest(ar.getAuthToken().getAuthTokenID(), ar.getAuthToken().getPersonID()));
-		
-		if(pr.getData() == null) {
-			System.out.println("WHYYYY???");
-		}
+	
 		assertEquals(pr.getData().length, 31, 0);
 	}
 

@@ -19,6 +19,7 @@ public class LoginService {
 	 * @param lr		a LoginRequest object that contains the user information.
 	 * @return			an AuthResult object with the response information.*/
 	public AuthResult login(LoginRequest lr) {
+		logger.log(Level.INFO, "Starting login.");
 		//Check the username and password and return the personID for the User.
 		Database db = new Database();
 		User entry;
@@ -44,6 +45,7 @@ public class LoginService {
 			
 			db.getAD().addAuthToken(a);
 			db.closeConnection(true);
+			logger.log(Level.INFO, "Exiting login.");
 			return new AuthResult(a);
 		} catch (DatabaseException notFound) {
 			db.closeConnection(false);

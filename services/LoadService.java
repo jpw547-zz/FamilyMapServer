@@ -21,6 +21,7 @@ public class LoadService {
 	 * @param lr			a LoadRequest object with the information to insert.
 	 * @return				a Result object with the resulting message.*/
 	public Result load(LoadRequest lr) {
+		logger.log(Level.INFO, "Starting load.");
 		//Clear the database.
 		ClearService cs = new ClearService();
 		Result clear = cs.clear();
@@ -57,6 +58,7 @@ public class LoadService {
 		
 		db.closeConnection(true);
 		logger.log(Level.FINE, String.format("Successfully added %s users, %s persons, and %s events to the database.", lr.getUserList().length, lr.getPersonList().length, lr.getEventList().length));
+		logger.log(Level.INFO, "Exiting load.");
 		return new Result(String.format("Successfully added %s users, %s persons, and %s events to the database.", lr.getUserList().length, lr.getPersonList().length, lr.getEventList().length));
 	}
 }

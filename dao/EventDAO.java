@@ -55,7 +55,7 @@ public class EventDAO {
 				stmt.setString(9, e.getYear());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Adding Event");
+				logger.log(Level.FINEST, "Adding Event");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -91,7 +91,7 @@ public class EventDAO {
 				stmt.setString(9, e.getEventID());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Modifying Event");
+				logger.log(Level.FINEST, "Modifying Event");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -119,7 +119,7 @@ public class EventDAO {
 				stmt.setString(1, e.getEventID());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Deleting Event");
+				logger.log(Level.FINEST, "Deleting Event");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -143,7 +143,7 @@ public class EventDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				logger.log(Level.FINE, "Deleting all Events");
+				logger.log(Level.FINEST, "Deleting all Events");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -173,7 +173,7 @@ public class EventDAO {
 				stmt.setString(1, eventID);
 				
 				//Execute the query, and construct the Event from the information in the ResultSet.
-				logger.log(Level.FINE, "Getting Event");
+				logger.log(Level.FINEST, "Getting Event");
 				ResultSet rs = stmt.executeQuery();
 				return new Event(
 						rs.getString("eventID"), 
@@ -211,7 +211,7 @@ public class EventDAO {
 				stmt.setString(1, descendant);
 				
 				//Execute the finalized query.
-				logger.log(Level.FINE, "Getting all Events");
+				logger.log(Level.FINEST, "Getting all Events");
 				ResultSet rs = stmt.executeQuery();
 				
 				//Iterate over the ResultSet to construct Event objects and add them to the Set to be returned.
@@ -230,9 +230,7 @@ public class EventDAO {
 				}
 				//For some reason it won't let me just do the toArray() function and cast as an Event[].....
 				Event[] all = new Event[res.size()];
-				for(int i = 0; i < res.size(); i++) {
-					all[i] = res.get(i);
-				}
+				res.toArray(all);
 				return all;
 			}
 			finally {

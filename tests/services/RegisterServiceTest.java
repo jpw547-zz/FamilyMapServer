@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import requests.RegisterRequest;
 import results.AuthResult;
+import services.ClearService;
 import services.RegisterService;
 
 public class RegisterServiceTest {
@@ -15,6 +16,7 @@ public class RegisterServiceTest {
 
 	@Before
 	public void setUp() {
+		new ClearService().clear();
 		rs = new RegisterService();
 	}
 

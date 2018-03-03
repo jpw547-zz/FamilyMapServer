@@ -19,6 +19,7 @@ public class EventService {
 	 * @param er			the EventRequest with the AuthToken for the user.
 	 * @return				an EventResult object with the response data, or <code>null</code> if no Events are found.*/
 	public EventResult getAll(EventRequest er) {
+		logger.log(Level.INFO, "Starting GetAll in EventService.");
 		Database db = new Database();
 		try {
 			//Get AuthToken
@@ -32,6 +33,7 @@ public class EventService {
 			Event[] results = db.getED().getAllEvents(token.getUserName());
 			db.closeConnection(true);
 			logger.log(Level.FINE, "Returning Event array.");
+			logger.log(Level.INFO, "Exiting GetAll in EventService.");
 			return new EventResult(results);
 		} catch (DatabaseException evt) {
 			db.closeConnection(false);
@@ -44,11 +46,13 @@ public class EventService {
 	 * @param er			the EventRequest with the eventID to be found.
 	 * @return				an EventResult object with the response data, or <code>null</code> if not found.*/
 	public EventResult getEvent(EventRequest er) {
+		logger.log(Level.INFO, "Starting GetEvent in EventService.");
 		Database db = new Database();
 		try {
 			Event result = db.getED().getEvent(er.getEventID());
 			db.closeConnection(true);
 			logger.log(Level.FINE, "Returning Event.");
+			logger.log(Level.INFO, "Exiting GetEvent in EventService.");
 			return new EventResult(result);
 		} catch (DatabaseException evt) {
 			db.closeConnection(false);

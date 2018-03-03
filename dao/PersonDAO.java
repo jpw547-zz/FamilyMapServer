@@ -54,7 +54,7 @@ public class PersonDAO {
 				stmt.setString(8, p.getSpouse());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Adding Person");
+				logger.log(Level.FINEST, "Adding Person");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -89,7 +89,7 @@ public class PersonDAO {
 				stmt.setString(8, p.getPersonID());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Modifying Person");
+				logger.log(Level.FINEST, "Modifying Person");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -117,7 +117,7 @@ public class PersonDAO {
 				stmt.setString(1, p.getPersonID());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Deleting Person");
+				logger.log(Level.FINEST, "Deleting Person");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -141,7 +141,7 @@ public class PersonDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				logger.log(Level.FINE, "Deleting all Persons");
+				logger.log(Level.FINEST, "Deleting all Persons");
 				stmt.executeUpdate();
 			} 
 			finally {
@@ -170,7 +170,7 @@ public class PersonDAO {
 				stmt.setString(1, personID);
 				
 				//Execute the query, and construct a new Person object from the data in the ResultSet.
-				logger.log(Level.FINE, "Getting Person");
+				logger.log(Level.FINEST, "Getting Person");
 				ResultSet rs = stmt.executeQuery();
 				return new Person( 
 						rs.getString("personID"), 
@@ -207,7 +207,7 @@ public class PersonDAO {
 				stmt.setString(1, descendant);
 				
 				//Execute the finalized query.
-				logger.log(Level.FINE, "Getting all Persons");
+				logger.log(Level.FINEST, "Getting all Persons");
 				ResultSet rs = stmt.executeQuery();
 				
 				//Iterate over the ResultSet and use the data to construct Person objects and add them to the Set.
@@ -223,11 +223,8 @@ public class PersonDAO {
 					String spouse = rs.getString("spouse");
 					res.add(new Person(p, f, l, c, d, father, mother, spouse));
 				}
-				//For some reason it won't let me just do the toArray() function and cast as a Person[].....
 				Person[] all = new Person[res.size()];
-				for(int i = 0; i < res.size(); i++) {
-					all[i] = res.get(i);
-				}
+				res.toArray(all);
 				return all;
 			}
 			finally {

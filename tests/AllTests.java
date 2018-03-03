@@ -23,7 +23,7 @@ public class AllTests {
 		
 	    private static void initLog() throws IOException {
 
-	        Level logLevel = Level.SEVERE;
+	        Level logLevel = Level.OFF;
 
 	        logger = Logger.getLogger("familymaptest"); 
 	        logger.setLevel(logLevel);

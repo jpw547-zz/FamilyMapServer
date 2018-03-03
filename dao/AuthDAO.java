@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,7 +49,7 @@ public class AuthDAO {
 				stmt.setString(3, a.getPersonID());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Adding AuthToken");
+				logger.log(Level.FINEST, "Adding AuthToken");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -79,7 +80,7 @@ public class AuthDAO {
 				stmt.setString(1, a.getAuthTokenID());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Deleting AuthToken");
+				logger.log(Level.FINEST, "Deleting AuthToken");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -103,7 +104,7 @@ public class AuthDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No parameters to add to the statement, so proceed to execution.
-				logger.log(Level.FINE, "Deleting all AuthTokens.");
+				logger.log(Level.FINEST, "Deleting all AuthTokens.");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -135,7 +136,7 @@ public class AuthDAO {
 				stmt.setString(1, authID);
 				
 				//Execute the query and add the values to a new object to be returned.
-				logger.log(Level.FINE, "Getting AuthToken.");
+				logger.log(Level.FINEST, "Getting AuthToken.");
 				ResultSet rs = stmt.executeQuery();
 				return new AuthToken(rs.getString("tokenID"), rs.getString("userName"), rs.getString("personID"));
 			}
@@ -161,19 +162,19 @@ public class AuthDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No additional parameters to add, so we execute the query.
-				logger.log(Level.FINE, "Getting all AuthTokens.");
+				logger.log(Level.FINEST, "Getting all AuthTokens.");
 				ResultSet rs = stmt.executeQuery();
 				
 				//Iterate through the ResultSet and create new AuthTokens to be returned in the final Set.
-				AuthToken[] all = new AuthToken[rs.getFetchSize()];
-				int rowCount = 0;
+				ArrayList<AuthToken> res = new ArrayList<AuthToken>();
 				while(rs.next()) {
 					String id = rs.getString("tokenID");
 					String user = rs.getString("userName");
 					String person = rs.getString("personID");
-					all[rowCount] = new AuthToken(id, user, person);
-					rowCount++;
+					res.add(new AuthToken(id, user, person));
 				}
+				AuthToken[] all = new AuthToken[res.size()];
+				res.toArray(all);
 				return all;
 			}
 			finally {

@@ -95,6 +95,11 @@ public class JSONConverter {
 		
 		/**A double of the location's longitude.*/
 		private double longitude;
+		
+		public String getCountry() { return country; }
+		public String getCity() { return city; }
+		public double getLatitude() { return latitude; }
+		public double getLongitude() { return longitude; }
 	}
 	
 	/**Essentially a struct for an array of Location objects.*/

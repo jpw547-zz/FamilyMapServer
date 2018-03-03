@@ -35,7 +35,7 @@ public class Database {
 //Setters
 	/**Establishes a connection to the SQL database.*/
 	public void setConnection() {
-		logger.log(Level.FINE, "Trying to open database connection.");
+		logger.log(Level.FINER, "Trying to open database connection.");
 		try {
 	         Class.forName("org.sqlite.JDBC");
 	         c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
@@ -43,7 +43,7 @@ public class Database {
 	      } catch (Exception e) {
 	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	      }
-	      logger.log(Level.FINE, "Opened database successfully");
+	      logger.log(Level.FINER, "Opened database successfully");
 	}
 	
 //	public void setAD() { AD = new AuthDAO(); }
@@ -76,7 +76,7 @@ public class Database {
 				if(!commit) { c.rollback(); }
 	            c.close();
 	            c = null;
-	            logger.log(Level.FINE, "Database connection closed.");
+	            logger.log(Level.FINER, "Database connection closed.");
 	        } catch (SQLException e) {
 				throw new DatabaseException("closeConnection failed");
 	        }

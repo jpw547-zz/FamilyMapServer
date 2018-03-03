@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.*;
 
 import model.User;
@@ -54,7 +55,7 @@ public class UserDAO {
 				stmt.setString(7, u.getPersonID());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Adding User");
+				logger.log(Level.FINEST, "Adding User");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -91,7 +92,7 @@ public class UserDAO {
 				stmt.setString(7, u.getUserName());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Modifying User");
+				logger.log(Level.FINEST, "Modifying User");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -122,7 +123,7 @@ public class UserDAO {
 				stmt.setString(1, u.getUserName());
 				
 				//Execute the finalized statement.
-				logger.log(Level.FINE, "Deleting User");
+				logger.log(Level.FINEST, "Deleting User");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -147,7 +148,7 @@ public class UserDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				logger.log(Level.FINE, "Deleting all Users");
+				logger.log(Level.FINEST, "Deleting all Users");
 				stmt.executeUpdate();
 			}
 			finally {
@@ -176,8 +177,9 @@ public class UserDAO {
 				stmt.setString(1, userName);
 				
 				//Execute the finalized query, and construct a User object using the data from the ResultSet.
-				logger.log(Level.FINE, "Getting User");
+				logger.log(Level.FINEST, "Getting User");
 				ResultSet rs = stmt.executeQuery();
+				if(!rs.next()) { throw new DatabaseException("Get User failed. : User not found."); }
 				return new User(
 						rs.getString("userName"), 
 						rs.getString("password"), 
@@ -210,12 +212,11 @@ public class UserDAO {
 				stmt = c.prepareStatement(sql);
 				
 				//No extra parameters to add to the statement, so proceed to execution.
-				logger.log(Level.FINE, "Getting all Users");
+				logger.log(Level.FINEST, "Getting all Users");
 				ResultSet rs = stmt.executeQuery();
 				
 				//Iterate through the ResultSet and use the data to build User objects to add to the Set.
-				User[] all = new User[rs.getFetchSize()];
-				int rowCount = 0;
+				ArrayList<User> res = new ArrayList<User>();
 				while(rs.next()) {
 					String u = rs.getString("userName");
 					String p = rs.getString("password");
@@ -224,9 +225,10 @@ public class UserDAO {
 					String l = rs.getString("lastName");
 					char g = rs.getString("gender").charAt(0);
 					String id = rs.getString("personID");
-					all[rowCount] = new User(u, p, e, f, l, g, id);
-					rowCount++;
+					res.add(new User(u, p, e, f, l, g, id));
 				}
+				User[] all = new User[res.size()];
+				res.toArray(all);
 				return all;
 			}
 			finally {
