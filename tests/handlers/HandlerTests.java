@@ -6,7 +6,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	JSONConverterTest.class 
+	JSONConverterTest.class,
+	FileHandlerTest.class,
+	ClearHandlerTest.class
 })
 public class HandlerTests {
 

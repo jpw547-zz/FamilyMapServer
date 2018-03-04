@@ -8,15 +8,13 @@ import org.junit.Test;
 
 import requests.RegisterRequest;
 import results.AuthResult;
-import services.ClearService;
-import services.RegisterService;
+import services.*;
 
 public class RegisterServiceTest {
 	private RegisterService rs;
 
 	@Before
 	public void setUp() {
-		new ClearService().clear();
 		rs = new RegisterService();
 	}
 

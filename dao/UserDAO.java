@@ -65,6 +65,9 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException e) {
+			if(e.getLocalizedMessage().contains("not unique")) {
+				throw new DatabaseException("Username already registered in the database.");
+			}
 			throw new DatabaseException(String.format("Add User failed. : %s ::UD", e.getLocalizedMessage()));
 		}
 	}

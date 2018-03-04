@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.logging.*;
 
-import requests.LoadRequest;
+import results.ListResult;
 
 import model.*;
 
@@ -45,7 +45,7 @@ public class DataGenerator {
 	private ArrayList<Person> personList;
 	private ArrayList<Event> eventList;
 	
-	public LoadRequest GenerateDefaultAncestorData(Person start)   {
+	public ListResult GenerateDefaultAncestorData(Person start)   {
 		logger.log(Level.INFO, "Starting GenerateDefaultAncestorData.");
 		JSONConverter j = new JSONConverter();
 		try {
@@ -65,13 +65,14 @@ public class DataGenerator {
 		
 		AddNewGeneration(1, start, childBirthYear);
 		personList.add(start);
+		GenerateUserEvents(start, childBirthYear);
 		logger.log(Level.INFO, "Exiting GenerateDefaultAncestorData.");
 		Person[] per = new Person[personList.size()];
 		Event[] evt = new Event[eventList.size()];
-		return new LoadRequest(new User[0], personList.toArray(per), eventList.toArray(evt));
+		return new ListResult(personList.toArray(per), eventList.toArray(evt));
 	}
 	
-	public LoadRequest GenerateAncestorData(Person start, int gen)   {
+	public ListResult GenerateAncestorData(Person start, int gen)   {
 		logger.log(Level.INFO, "Starting GenerateAncestorData - non default.");
 		JSONConverter j = new JSONConverter();
 		try {
@@ -90,10 +91,11 @@ public class DataGenerator {
 		
 		AddNewGeneration(1, start, childBirthYear);
 		personList.add(start);
+		GenerateUserEvents(start, childBirthYear);
 		logger.log(Level.INFO, "Exiting GenerateAncestorData - non default.");
 		Person[] per = new Person[personList.size()];
 		Event[] evt = new Event[eventList.size()];
-		return new LoadRequest(null, personList.toArray(per), eventList.toArray(evt));
+		return new ListResult(personList.toArray(per), eventList.toArray(evt));
 	}
 	
 	private void AddNewGeneration(int gen, Person child, int childBirthYear)   {
@@ -321,5 +323,67 @@ public class DataGenerator {
 						));
 		
 		logger.log(Level.FINER, "Exiting GenerateDeathEvents.");
+	}
+	
+	private void GenerateUserEvents(Person user, int birthYear) {
+		//Generate a birth event
+		String BirthID = UUID.randomUUID().toString();
+		int LocationIndex = rand.nextInt(locations.length);
+		eventList.add(
+				new Event(
+						BirthID,
+						user.getPersonID(),
+						user.getDescendant(),
+						locations[LocationIndex].getLatitude(),
+						locations[LocationIndex].getLongitude(),
+						locations[LocationIndex].getCountry(),
+						locations[LocationIndex].getCity(),
+						"birth",
+						Integer.toString(birthYear)
+						));
+		
+		//Generate a baptism event
+		int baptismYear;
+		do {
+			baptismYear = (birthYear + rand.nextInt(MAX_AGE - MIN_BAPTISM_AGE) + MIN_BAPTISM_AGE);
+		} while ((baptismYear - birthYear) > MAX_AGE);
+		
+		String BaptismID = UUID.randomUUID().toString();
+		int bLocationIndex = rand.nextInt(locations.length);
+		eventList.add(
+				new Event(
+						BaptismID,
+						user.getPersonID(),
+						user.getDescendant(),
+						locations[bLocationIndex].getLatitude(),
+						locations[bLocationIndex].getLongitude(),
+						locations[bLocationIndex].getCountry(),
+						locations[bLocationIndex].getCity(),
+						"baptism",
+						Integer.toString(baptismYear)
+						));
+		
+		//Generate a death event, cause the user dies alone.
+		int deathYear;
+		
+		int YearsTilMax = (MAX_AGE - (baptismYear - birthYear) + 1);
+		do {
+			deathYear = (baptismYear + rand.nextInt((YearsTilMax)));
+		} while (deathYear < fatherBaptismYear);
+		
+		String DeathID = UUID.randomUUID().toString();
+		int dLocationIndex = rand.nextInt(locations.length);
+		eventList.add(
+				new Event(
+						DeathID,
+						user.getPersonID(),
+						user.getDescendant(),
+						locations[dLocationIndex].getLatitude(),
+						locations[dLocationIndex].getLongitude(),
+						locations[dLocationIndex].getCountry(),
+						locations[dLocationIndex].getCity(),
+						"death",
+						Integer.toString(deathYear)
+						));
 	}
 }

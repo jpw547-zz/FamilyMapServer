@@ -15,7 +15,6 @@ public class PersonServiceTest {
 	
 	@Before
 	public void setUp() {
-		new ClearService().clear();
 		ps = new PersonService();
 	}
 

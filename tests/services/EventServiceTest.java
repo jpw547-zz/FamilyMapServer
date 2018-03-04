@@ -18,7 +18,6 @@ public class EventServiceTest {
 
 	@Before
 	public void setUp() {
-		new ClearService().clear();
 		es = new EventService();
 	}
 
@@ -33,12 +32,12 @@ public class EventServiceTest {
 		AuthResult ar = new RegisterService().register(req);
 		
 		EventRequest er = new EventRequest(ar.getAuthToken().getAuthTokenID(), "");
-		assertEquals(120, es.getAll(er).getData().length);
+		assertEquals(123, es.getAll(er).getData().length);
 	}
 
 	@Test
 	public void testGetEvent() {
-		Event a = new Event("faltg", "minty", "gMonster", 10.191, 77.004, "Iceland", "Yyyvsk", "birth", "1777");
+		Event a = new Event("faltg", "minty", "tMonster", 10.191, 77.004, "Iceland", "Yyyvsk", "birth", "1777");
 
 		Database db = new Database();
 		

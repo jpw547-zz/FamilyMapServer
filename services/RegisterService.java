@@ -3,10 +3,8 @@ package services;
 import java.util.UUID;
 import java.util.logging.*;
 
-import requests.LoadRequest;
-import requests.LoginRequest;
-import requests.RegisterRequest;
-import results.AuthResult;
+import requests.*;
+import results.*;
 import dao.*;
 import model.*;
 import services.DataGenerator;
@@ -31,14 +29,7 @@ public class RegisterService {
 		Database db = new Database();
 		//Create a person object for the User.
 		Person p = new Person(
-				UUID.randomUUID().toString(),
-				rr.getFirstName(),
-				rr.getLastName(),
-				rr.getGender(),
-				rr.getUserName(),
-				"",
-				"",
-				"");
+				UUID.randomUUID().toString(), rr.getFirstName(), rr.getLastName(), rr.getGender(), rr.getUserName(), "", "", "");
 		//Create a new User object to be registered.
 		User newguy = new User(rr.getUserName(), rr.getPassword(), rr.getEmail(), rr.getFirstName(), rr.getLastName(), rr.getGender(), p.getPersonID());
 		try {
@@ -47,7 +38,7 @@ public class RegisterService {
 			
 			DataGenerator data = new DataGenerator();
 			//Make a fake LoadRequest object just to get the data back from the DataGenerator.
-			LoadRequest lr = data.GenerateDefaultAncestorData(p);
+			ListResult lr = data.GenerateDefaultAncestorData(p);
 			for(int i = 0; i < lr.getPersonList().length; i++) {
 				db.getPD().addPerson(lr.getPersonList()[i]);
 			}

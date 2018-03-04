@@ -44,6 +44,16 @@ public class JSONConverter {
 		return Jason.toJson(o);
 	}
 	
+	@SuppressWarnings("hiding")
+	public <Object> Object JSONToObject(String j, Class<Object> oClass) {
+		return Jason.fromJson(j, oClass);
+	}
+	
+	@SuppressWarnings("hiding")
+	public <Object> Object JSONToObject(Reader r, Class<Object> oClass) {
+		return Jason.fromJson(r, oClass);
+	}
+	
 	/**
 	 * @throws IOException */
 	public String[] GetNames(Names type) throws IOException {

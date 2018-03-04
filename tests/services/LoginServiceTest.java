@@ -10,15 +10,13 @@ import dao.*;
 
 import requests.LoginRequest;
 import results.AuthResult;
-import services.ClearService;
-import services.LoginService;
+import services.*;
 
 public class LoginServiceTest {
 	private LoginService ls;
 
 	@Before
 	public void setUp() {
-		new ClearService().clear();
 		ls = new LoginService();
 	}
 

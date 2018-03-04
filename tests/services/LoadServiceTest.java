@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import requests.LoadRequest;
 import results.Result;
-import services.ClearService;
 import services.LoadService;
 
 public class LoadServiceTest {
@@ -20,7 +19,6 @@ public class LoadServiceTest {
 
 	@Before
 	public void setUp() {
-		new ClearService().clear();
 		ls = new LoadService();
 	}
 

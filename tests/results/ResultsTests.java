@@ -6,10 +6,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	ResultTest.class,
-	PersonResultTest.class,
+	AuthResultTest.class, 
 	EventResultTest.class,
-	AuthResultTest.class
+	ListResultTest.class,
+	PersonResultTest.class,
+	ResultTest.class
 })
 public class ResultsTests {
 
