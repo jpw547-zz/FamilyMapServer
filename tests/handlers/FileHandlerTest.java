@@ -5,10 +5,24 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.net.*;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import dao.Database;
 
 public class FileHandlerTest {
 
+	@Before
+	public void setUp() {
+		Database.setTesting(true);
+	}
+	
+	@After
+	public void tearDown() {
+		Database.setTesting(false);
+	}
+	
 	@Test
 	public void testDefaultHandler() {
 		String serverHost = "localhost";

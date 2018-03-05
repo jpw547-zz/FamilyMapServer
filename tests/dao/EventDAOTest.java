@@ -17,16 +17,18 @@ public class EventDAOTest {
 	private Database db;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		Database.setTesting(true);
 		db = new Database();
 		ed = db.getED();;
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		db.closeConnection(false);
 		ed = null;
 		db = null;
+		Database.setTesting(false);
 	}
 
 	@Test

@@ -22,12 +22,18 @@ public class PersonService {
 		logger.log(Level.INFO, "Starting GetAll in PersonService.");
 		Database db = new Database();
 		try {
-			//Get AuthToken
-			AuthToken token = db.getAD().getAuthToken(pr.getAuthTokenID());
-			if(token == null) {
-				logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
+			AuthToken token;
+			try {
+				//Get AuthToken
+				token = db.getAD().getAuthToken(pr.getAuthTokenID());
+				if(token == null) {
+					logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
+					return new PersonResult("Invalid AuthTokenID.");
+				}
+			} catch (DatabaseException e) {
 				return new PersonResult("Invalid AuthTokenID.");
 			}
+			
 			
 			//Get Persons based on userName from the token.
 			Person[] results = db.getPD().getAllPersons(token.getUserName());
@@ -49,6 +55,17 @@ public class PersonService {
 		logger.log(Level.INFO, "Starting GetPerson in PersonService.");
 		Database db = new Database();
 		try {
+			try {
+				//Get AuthToken
+				AuthToken token = db.getAD().getAuthToken(pr.getAuthTokenID());
+				if(token == null) {
+					logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
+					return new PersonResult("Invalid AuthTokenID.");
+				}
+			} catch (DatabaseException e) {
+				return new PersonResult("Invalid AuthTokenID.");
+			}
+			
 			Person result = db.getPD().getPerson(pr.getPersonID());
 			db.closeConnection(true);
 			logger.log(Level.FINE, "Returning Person.");

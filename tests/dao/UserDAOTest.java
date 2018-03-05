@@ -17,16 +17,18 @@ public class UserDAOTest {
 	private Database db;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		Database.setTesting(true);
 		db = new Database();
 		ud = db.getUD();
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		db.closeConnection(false);
 		ud = null;
 		db = null;
+		Database.setTesting(false);
 	}
 
 	@Test

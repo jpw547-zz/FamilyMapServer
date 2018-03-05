@@ -17,12 +17,14 @@ public class LoginServiceTest {
 
 	@Before
 	public void setUp() {
+		Database.setTesting(true);
 		ls = new LoginService();
 	}
 
 	@After
 	public void tearDown() {
 		ls = null;
+		Database.setTesting(false);
 	}
 
 	@Test

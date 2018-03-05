@@ -10,12 +10,26 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import dao.Database;
 
 import services.ClearService;
 
 public class RegisterHandlerTest {
 
+	@Before
+	public void setUp() {
+		Database.setTesting(true);
+	}
+	
+	@After
+	public void tearDown() {
+		Database.setTesting(false);
+	}
+	
 	@Test
 	public void testRegisterHandler() {
 		String serverHost = "localhost";

@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.Database;
+
 import requests.*;
 import services.*;
 import results.*;
@@ -15,12 +17,14 @@ public class FillServiceTest {
 
 	@Before
 	public void setUp() {
+		Database.setTesting(true);
 		fs = new FillService();
 	}
 
 	@After
 	public void tearDown() {
 		fs = null;
+		Database.setTesting(false);
 	}
 
 	@Test

@@ -10,6 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.Database;
+
 import requests.LoadRequest;
 import results.Result;
 import services.LoadService;
@@ -19,12 +21,14 @@ public class LoadServiceTest {
 
 	@Before
 	public void setUp() {
+		Database.setTesting(true);
 		ls = new LoadService();
 	}
 
 	@After
 	public void tearDown() {
 		ls = null;
+		Database.setTesting(false);
 	}
 
 	@Test

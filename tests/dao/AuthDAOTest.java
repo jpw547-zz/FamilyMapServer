@@ -16,15 +16,17 @@ public class AuthDAOTest {
 
 	@Before
 	public void setUp() {
+		Database.setTesting(true);
 		db = new Database();
 		ad = db.getAD();
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		db.closeConnection(false);
 		ad = null;
 		db = null;
+		Database.setTesting(false);
 	}
 
 	@Test

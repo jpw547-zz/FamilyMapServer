@@ -21,6 +21,8 @@ public class Database {
 	/**The SQL Database Connection object.*/
 	private Connection c;
 	
+	private static boolean testing = false;
+	
 	private AuthDAO AD;
 	private UserDAO UD;
 	private PersonDAO PD;
@@ -38,13 +40,20 @@ public class Database {
 		logger.log(Level.FINER, "Trying to open database connection.");
 		try {
 	         Class.forName("org.sqlite.JDBC");
-	         c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
+	         if(testing) {
+	        	 c = DriverManager.getConnection("jdbc:sqlite:test.db");
+	         }
+	         if(!testing) {
+	        	 c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
+	         }
 	         c.setAutoCommit(false);
 	      } catch (Exception e) {
 	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	      }
 	      logger.log(Level.FINER, "Opened database successfully");
 	}
+	
+	public static void setTesting(boolean t) { testing = t; }
 	
 //	public void setAD() { AD = new AuthDAO(); }
 //	

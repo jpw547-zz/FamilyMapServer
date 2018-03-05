@@ -2,17 +2,21 @@ package handlers;
 
 import handlers.json.JSONConverter;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
-import services.*;
-import requests.*;
-import results.*;
+import requests.LoginRequest;
+import results.AuthResult;
+import services.LoginService;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class RegisterHandler implements HttpHandler {
+public class LoginHandler implements HttpHandler {
 
 	private AuthResult error;
 	
@@ -24,9 +28,9 @@ public class RegisterHandler implements HttpHandler {
 			if(exch.getRequestMethod().toUpperCase().equals("POST")) {
 				InputStream reqBody = exch.getRequestBody();
 				InputStreamReader in = new InputStreamReader(reqBody);
-				RegisterRequest rr = json.JSONToObject(in, RegisterRequest.class);
-				if(validateRequestInfo(rr)) {
-					AuthResult ar = new RegisterService().register(rr);
+				LoginRequest lr = json.JSONToObject(in, LoginRequest.class);
+				if(validateRequestInfo(lr)) {
+					AuthResult ar = new LoginService().login(lr);
 					exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 					OutputStream respBody = exch.getResponseBody();
 					OutputStreamWriter out = new OutputStreamWriter(respBody);
@@ -53,21 +57,12 @@ public class RegisterHandler implements HttpHandler {
 		}
 	}
 	
-	private boolean validateRequestInfo(RegisterRequest rr) {
-		if(rr.getUserName().isEmpty()) { error = new AuthResult("Username empty"); return false; }
-		if(rr.getPassword().isEmpty()) { error = new AuthResult("Password empty"); return false; }
-		if(rr.getEmail().isEmpty()) { error = new AuthResult("Email empty"); return false; }
-		if(rr.getFirstName().isEmpty()) { error = new AuthResult("First name empty"); return false; }
-		if(rr.getLastName().isEmpty()) { error = new AuthResult("Last name empty"); return false; }
-		if(rr.getGender() == 'f' || rr.getGender() == 'F') {
-			rr.setGender('F');
-		}
-		if(rr.getGender() == 'm' || rr.getGender() == 'M') {
-			rr.setGender('M');
-		}
-		if(rr.getGender() != 'M' && rr.getGender() != 'F') { error = new AuthResult("Gender invalid"); return false; }
-		
+	private boolean validateRequestInfo(LoginRequest lr) {
+		if(lr.getUsername().isEmpty()) { error = new AuthResult("Username empty"); return false; }
+		if(lr.getPassword().isEmpty()) { error = new AuthResult("Password empty"); return false; }
+
 		//At this point everything checks out.
 		return true;
 	}
+
 }

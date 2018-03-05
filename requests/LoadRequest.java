@@ -20,34 +20,34 @@ public class LoadRequest {
 	
 //Data members
 	/**The list of Users to be created.*/
-	private User[] userList;
+	private User[] users;
 	
 	/**The list of Persons to be created.*/
-	private Person[] personList;
+	private Person[] persons;
 	
 	/**The list of Events to be created.*/
-	private Event[] eventList;
+	private Event[] events;
 	
 //Setters
 	/**Sets the list of Users to be created.
-	 * @param userList		the list of Users.*/
-	public void setUserList(User[] userList) { this.userList = userList; }
+	 * @param users		the list of Users.*/
+	public void setUserList(User[] users) { this.users = users; }
 	
 	/**Sets the list of Persons to be created.
-	 * @param personList	the list of Persons.*/
-	public void setPersonList(Person[] personList) { this.personList = personList; }
+	 * @param persons	the list of Persons.*/
+	public void setPersonList(Person[] persons) { this.persons = persons; }
 	
 	/**Sets the list of Events to be created.
-	 * @param eventList		the list of Events.*/
-	public void setEventList(Event[] eventList) { this.eventList = eventList; }
+	 * @param events		the list of Events.*/
+	public void setEventList(Event[] events) { this.events = events; }
 	
 //Getters
 	/**@return				an array of Users.*/
-	public User[] getUserList() { return userList; }
+	public User[] getUserList() { return users; }
 	
 	/**@return				an array of Persons.*/
-	public Person[] getPersonList() { return personList; }
+	public Person[] getPersonList() { return persons; }
 	
 	/**@return				an array of Events.*/
-	public Event[] getEventList() { return eventList; }
+	public Event[] getEventList() { return events; }
 }

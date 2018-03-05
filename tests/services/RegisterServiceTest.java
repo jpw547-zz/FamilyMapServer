@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.Database;
+
 import requests.RegisterRequest;
 import results.AuthResult;
 import services.*;
@@ -15,12 +17,14 @@ public class RegisterServiceTest {
 
 	@Before
 	public void setUp() {
+		Database.setTesting(true);
 		rs = new RegisterService();
 	}
 
 	@After
 	public void tearDown() {
 		rs = null;
+		Database.setTesting(false);
 	}
 
 	@Test

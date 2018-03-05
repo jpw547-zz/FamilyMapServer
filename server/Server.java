@@ -28,14 +28,17 @@ public class Server {
 		// /user/register
 		server.createContext("/user/register", new RegisterHandler());
 		// /user/login
+		server.createContext("/user/login", new LoginHandler());
 		// /clear
 		server.createContext("/clear", new ClearHandler());
 		// /fill/[username]/{generations}
+		server.createContext("/fill", new FillHandler());
 		// /load
-		// /person/[personID]
-		// /person
-		// /event/[eventID]
-		// /event
+		server.createContext("/load", new LoadHandler());
+		// /person OR /person/[personID]
+		server.createContext("/person", new PersonHandler());
+		// /event OR /event/[eventID]
+		server.createContext("/event", new EventHandler());
 		// / **Default file handler**
 		server.createContext("/", new FileHandler());
 		

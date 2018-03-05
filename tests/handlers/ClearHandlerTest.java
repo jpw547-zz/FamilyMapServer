@@ -6,12 +6,27 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import dao.Database;
 
 public class ClearHandlerTest {
 
+	@Before
+	public void setUp() {
+	}
+	
+	@After
+	public void tearDown() {
+		Database.setTesting(false);
+	}
+	
 	@Test
 	public void testClearHandler() {
+		Database.setTesting(true);
+
 		String serverHost = "localhost";
 		String serverPort = "8080";
 		

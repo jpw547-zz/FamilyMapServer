@@ -18,12 +18,14 @@ public class EventServiceTest {
 
 	@Before
 	public void setUp() {
+		Database.setTesting(true);
 		es = new EventService();
 	}
 
 	@After
 	public void tearDown() {
 		es = null;
+		Database.setTesting(false);
 	}
 
 	@Test
