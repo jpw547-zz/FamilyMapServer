@@ -6,36 +6,40 @@ import java.sql.SQLException;
 import java.util.logging.*;
 
 public class Database {
-//Constructors
-	/**The general constructor for an AuthDAO object.*/
+	/**The general constructor for a Database object.*/
 	public Database() {
 		setConnection();
 		AD = new AuthDAO(c);
 		UD = new UserDAO(c);
 		PD = new PersonDAO(c);
 		ED = new EventDAO(c);
-		
 	}
 	
-//Data members
-	/**The SQL Database Connection object.*/
+	/**The database Connection object.*/
 	private Connection c;
 	
+	/**A boolean to determine if data should be entered into the testing database or not.*/
 	private static boolean testing = false;
 	
+	/**The Database Access Object for AuthTokens*/
 	private AuthDAO AD;
+	
+	/**The Database Access Object for Users*/
 	private UserDAO UD;
+	
+	/**The Database Access Object for Persons*/
 	private PersonDAO PD;
+	
+	/**The Database Access Object for Events*/
 	private EventDAO ED;
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
+	static { logger = Logger.getLogger("familymaptest"); }
 	
-	static {
-        logger = Logger.getLogger("familymaptest");
-    }
 	
-//Setters
-	/**Establishes a connection to the SQL database.*/
+	
+	/**Establishes a connection to the database.*/
 	public void setConnection() {
 		logger.log(Level.FINER, "Trying to open database connection.");
 		try {
@@ -46,6 +50,7 @@ public class Database {
 	         if(!testing) {
 	        	 c = DriverManager.getConnection("jdbc:sqlite:fmdb.db");
 	         }
+	         //Prevent changes from auto-committing.
 	         c.setAutoCommit(false);
 	      } catch (Exception e) {
 	         System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -53,29 +58,25 @@ public class Database {
 	      logger.log(Level.FINER, "Opened database successfully");
 	}
 	
+	/**Sets the value of the testing boolean.
+	 * @param t			the value to set "testing" as. Either true or false.*/
 	public static void setTesting(boolean t) { testing = t; }
-	
-//	public void setAD() { AD = new AuthDAO(); }
-//	
-//	public void setUD() { UD = new UserDAO(); }
-//	
-//	public void setPD() { PD = new PersonDAO(); }
-//	
-//	public void setED() { ED = new EventDAO(); }
-	
-//Getters
-	/**@return		the database Connection object*/
+
+	/**@return			the database Connection object*/
 	public Connection getConnection() { return c; }
 	
+	/**@return 			the DAO for AuthTokens*/
 	public AuthDAO getAD() { return AD; }
 
+	/**@return 			the DAO for Users*/
 	public UserDAO getUD() { return UD; }
 
+	/**@return 			the DAO for Persons*/
 	public PersonDAO getPD() { return PD; }
 
+	/**@return 			the DAO for Events*/
 	public EventDAO getED() { return ED; }
 
-//Remaining class methods
 	/**Closes the connection to the database.
 	 * @param commit	true to commit changes, false to rollback.*/
 	public void closeConnection(boolean commit) {

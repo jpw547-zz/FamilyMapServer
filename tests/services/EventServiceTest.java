@@ -20,6 +20,7 @@ public class EventServiceTest {
 	public void setUp() {
 		Database.setTesting(true);
 		es = new EventService();
+		new ClearService().clear();
 	}
 
 	@After
@@ -39,7 +40,10 @@ public class EventServiceTest {
 
 	@Test
 	public void testGetEvent() {
-		Event a = new Event("faltg", "minty", "tMonster", 10.191, 77.004, "Iceland", "Yyyvsk", "birth", "1777");
+		RegisterRequest req = new RegisterRequest("tMonster", "gaanhpianh", "dobby@hogwarts.edu", "Nick", "Dumbledore", 'M');
+		AuthResult ar = new RegisterService().register(req);
+		
+		Event a = new Event("faltg", ar.getAuthToken().getPersonID(), "tMonster", 10.191, 77.004, "Iceland", "Yyyvsk", "birth", "1777");
 
 		Database db = new Database();
 		
@@ -51,7 +55,7 @@ public class EventServiceTest {
 			System.out.println(e.getLocalizedMessage());
 		}
 		
-		EventRequest er = new EventRequest("", "faltg");
+		EventRequest er = new EventRequest(ar.getAuthToken().getAuthTokenID(), "faltg");
 		assertEquals("1777", es.getEvent(er).getEvent().getYear());
 	}
 }

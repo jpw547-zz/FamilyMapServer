@@ -24,6 +24,8 @@ public class ListResult extends Result {
 	/**The array of Events to be returned.*/
 	private Event[] eventList;
 	
+	
+	
 	/**Sets the array of Persons to be returned.
 	 * @param pList		the Person array to be returned*/
 	public void setPersonList(Person[] pList) { this.personList = pList; }

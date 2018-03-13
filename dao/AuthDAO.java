@@ -2,41 +2,39 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import model.AuthToken;
 
 /**This class performs database operations for AuthToken objects.
  * @author John Werner*/
-public class AuthDAO {
-	
-//Constructors
-	/**The general constructor for an AuthDAO object.*/
+public class AuthDAO {	
+	/**The general constructor for an AuthDAO object.
+	 * @param c					the database Connection object*/
 	public AuthDAO(Connection c) {
 		setConnection(c);
 	}
 	
-//Data members
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	
+	/**A reference to the database Connection object*/
 	private Connection c;
 	
-//Setters
+	
+	
+	/**Sets the connection for the AuthDAO object.
+	 * @param c					the database Connection object*/
 	public void setConnection(Connection c) { this.c = c; }
-//Getters
-	/**@return				the database Connection object*/
+
+	/**@return					the database Connection object*/
 	public Connection getConnection() { return c; }
 	
-//Remaining class methods
 	/**Adds an AuthToken's information to the database.
-	 * @param a			the AuthToken object
-	 * @throws 			DatabaseException */
+	 * @param a					the AuthToken object
+	 * @throws 					DatabaseException */
 	public void addAuthToken(AuthToken a) throws DatabaseException {
-		//Check parameters before continuing.
-		assert a != null : "Null AuthToken. ::AD::Add";
-		
 		PreparedStatement stmt = null;
 		try {
 			try {
@@ -59,17 +57,14 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Add AuthToken failed. : %s ::AD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Add AuthToken failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Deletes an existing database entry for an AuthToken.
-	 * @param a			the AuthToken object to be removed
-	 * @throws 			DatabaseException */
+	 * @param a					the AuthToken object to be removed
+	 * @throws 					DatabaseException */
 	public void deleteAuthToken(AuthToken a) throws DatabaseException {
-		//Check parameters before continuing.
-		assert a != null : "Null AuthToken. ::AD::Delete";
-				
 		PreparedStatement stmt = null;
 		try {
 			try {
@@ -90,12 +85,12 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Delete AuthToken failed. : %s ::AD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete AuthToken failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Deletes all AuthToken information from the database.
-	 * @throws 			DatabaseException */
+	 * @throws 						DatabaseException */
 	public void deleteAllAuthTokens() throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -114,7 +109,7 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Delete All AuthTokens failed. : %s ::AD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete All AuthTokens failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -123,9 +118,6 @@ public class AuthDAO {
 	 * @return						an AuthToken object representing the information in the database.
 	 * @throws DatabaseException 	if it is unable to get an AuthToken*/
 	public AuthToken getAuthToken(String authID) throws DatabaseException {
-		//Check parameters before continuing.
-		assert !authID.equals("") : "Empty authID. ::AD::Get";
-		
 		PreparedStatement stmt = null;
 		try {
 			try {
@@ -147,7 +139,7 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Get AuthToken failed. : %s ::AD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get AuthToken failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -184,7 +176,7 @@ public class AuthDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Get All AuthTokens failed. : %s ::AD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get All AuthTokens failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 }

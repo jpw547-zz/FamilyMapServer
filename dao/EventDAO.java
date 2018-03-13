@@ -8,34 +8,32 @@ import model.Event;
 
 /**This class performs database operations for Event objects.
  * @author John Werner*/
-public class EventDAO {
-	
-//Constructors
-	/**The general constructor for an EventDAO object.*/
+public class EventDAO {	
+	/**The general constructor for a EventDAO object.
+	 * @param c			the database Connection object*/
 	public EventDAO(Connection c) {
 		setConnection(c);
 	}
 	
-//Data members
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
+	static { logger = Logger.getLogger("familymaptest"); }
 	
-	static {
-        logger = Logger.getLogger("familymaptest");
-    }
-	
+	/**A reference to the database Connection object*/
 	private Connection c;
 	
-//Setters
+	
+	
+	/**Sets the connection for the EventDAO object.
+	 * @param c			the database Connection object*/
 	public void setConnection(Connection c) { this.c = c; }
 	
-//Getters
-	/**@return				the database Connection object*/
+	/**@return			the database Connection object*/
 	public Connection getConnection() { return c; }
-	
-//Remaining class methods	
+		
 	/**Adds an Event's information to the database.
-	 * @param e				the Event object
-	 * @throws				DatabaseException*/
+	 * @param e			the Event object
+	 * @throws			DatabaseException*/
 	public void addEvent(Event e) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -65,13 +63,13 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException(String.format("Add Event failed. : %s ::UD", err.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Add Event failed. : %s", err.getLocalizedMessage()));
 		}
 	}
 	
 	/**Modifies an existing database entry for an Event.
-	 * @param e				the Event object to be modified
-	 * @throws 				DatabaseException */
+	 * @param e			the Event object to be modified
+	 * @throws 			DatabaseException */
 	public void modifyEvent(Event e) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -101,13 +99,13 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException(String.format("Modify Event failed. : %s ::UD", err.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Modify Event failed. : %s", err.getLocalizedMessage()));
 		}
 	}
 	
 	/**Deletes an existing database entry for an Event.
-	 * @param e				the Event object to be removed
-	 * @throws 				DatabaseException */
+	 * @param e			the Event object to be removed
+	 * @throws 			DatabaseException */
 	public void deleteEvent(Event e) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -129,12 +127,12 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException(String.format("Delete Event failed. : %s ::UD", err.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete Event failed. : %s", err.getLocalizedMessage()));
 		}
 	}
 	
 	/**Deletes all Event information from the database.
-	 * @throws 				DatabaseException */
+	 * @throws 			DatabaseException */
 	public void deleteAllEvents() throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -154,14 +152,14 @@ public class EventDAO {
 			}
 		} catch (SQLException err) {
 			System.out.println("Delete All Events failed.");
-			throw new DatabaseException(String.format("Delete all Events failed. : %s ::UD", err.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete all Events failed. : %s", err.getLocalizedMessage()));
 		}
 	}
 	
 	/**Retrieves the information for an Event in the database.
-	 * @param eventID		the identifier for the Event to be returned
-	 * @return				an Event object representing the information in the database.
-	 * @throws 				DatabaseException */
+	 * @param eventID	the identifier for the Event to be returned
+	 * @return			an Event object representing the information in the database.
+	 * @throws 			DatabaseException */
 	public Event getEvent(String eventID) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -193,13 +191,13 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException(String.format("Get Event failed. : %s ::UD", err.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get Event failed. : %s", err.getLocalizedMessage()));
 		}
 	}
 	
 	/**Retrieves all information for all Events in the database.
-	 * @return 				an array of Event objects representing all the information in the Event table of the database.
-	 * @throws 				DatabaseException */
+	 * @return 			an array of Event objects representing all the information in the Event table of the database.
+	 * @throws 			DatabaseException */
 	public Event[] getAllEvents(String descendant) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -240,7 +238,7 @@ public class EventDAO {
 				}
 			}
 		} catch (SQLException err) {
-			throw new DatabaseException(String.format("Get All Events failed. : %s ::UD", err.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get All Events failed. : %s", err.getLocalizedMessage()));
 		}
 	}
 }

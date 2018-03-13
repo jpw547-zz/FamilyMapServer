@@ -2,33 +2,31 @@ package handlers;
 
 import handlers.json.JSONConverter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 import requests.LoginRequest;
-import results.AuthResult;
+import results.*;
 import services.LoginService;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.*;
 
 public class LoginHandler implements HttpHandler {
-
-	private AuthResult error;
+	/**A result to be returned in the event of an error.*/
+	private Result error;
 	
+	/**The handler to log a user in with the server.*/
 	public void handle(HttpExchange exch) throws IOException {
 		boolean success = false;
 		JSONConverter json = new JSONConverter();
 		
 		try {
+			//Accept only POST methods.
 			if(exch.getRequestMethod().toUpperCase().equals("POST")) {
 				InputStream reqBody = exch.getRequestBody();
 				InputStreamReader in = new InputStreamReader(reqBody);
 				LoginRequest lr = json.JSONToObject(in, LoginRequest.class);
+				//Check to see if the request info is valid.
 				if(validateRequestInfo(lr)) {
 					AuthResult ar = new LoginService().login(lr);
 					exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -57,9 +55,10 @@ public class LoginHandler implements HttpHandler {
 		}
 	}
 	
+	/**Check that the request info is valid. Return true if it is, and false if there is a mistake.*/
 	private boolean validateRequestInfo(LoginRequest lr) {
-		if(lr.getUsername().isEmpty()) { error = new AuthResult("Username empty"); return false; }
-		if(lr.getPassword().isEmpty()) { error = new AuthResult("Password empty"); return false; }
+		if(lr.getUsername().isEmpty()) { error = new Result("Username empty"); return false; }
+		if(lr.getPassword().isEmpty()) { error = new Result("Password empty"); return false; }
 
 		//At this point everything checks out.
 		return true;

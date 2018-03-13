@@ -2,8 +2,6 @@ package requests;
 
 /**The class that defines requests for Event objects with the server.*/
 public class EventRequest {
-	
-//Constructors
 	/**The constructor for an EventRequest.
 	 * @param auth			the AuthTokenID for the user making the request. May be <code>null</code>.
 	 * @param event			the eventID for the event in question. May be <code>null</code>.*/
@@ -12,14 +10,14 @@ public class EventRequest {
 		setEventID(event);
 	}
 	
-//Data members
 	/**The authorization token for the EventRequest. May be <code>null</code>.*/
 	private String AuthTokenID;
 	
 	/**The identifier for the event in question. May be <code>null</code>.*/
 	private String eventID;
 	
-//Setters
+	
+	
 	/**Sets the AuthTokenID for the EventRequest.
 	 * @param authTokenID	a unique identifier string for the AuthToken object.*/
 	public void setAuthTokenID(String authTokenID) { AuthTokenID = authTokenID; }
@@ -28,10 +26,9 @@ public class EventRequest {
 	 * @param eventID		a unique identifier string for the Event object.*/
 	public void setEventID(String eventID) { this.eventID = eventID; }
 	
-//Getters
-	/**@return the AuthTokenID for the EventRequest.*/
+	/**@return 				the AuthTokenID for the EventRequest.*/
 	public String getAuthTokenID() { return AuthTokenID; }
 	
-	/**@return the eventID for the Event object tied to this request.*/
+	/**@return 				the eventID for the Event object tied to this request.*/
 	public String getEventID() { return eventID; }
 }

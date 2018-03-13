@@ -7,16 +7,16 @@ import requests.LoadRequest;
 import results.Result;
 
 /**The class definition for a LoadService object.*/
-public class LoadService {
-	
-//Constructors
+public class LoadService {	
 	/**The general constructor for a LoadService object.*/
 	public LoadService() {}
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	
-//Remaining class methods
+	
+	
 	/**Clears all database information and then loads the given data into the database.
 	 * @param lr			a LoadRequest object with the information to insert.
 	 * @return				a Result object with the resulting message.*/

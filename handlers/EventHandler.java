@@ -2,39 +2,43 @@ package handlers;
 
 import handlers.json.JSONConverter;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 import requests.EventRequest;
-import results.EventResult;
-import results.Result;
+import results.*;
 import services.EventService;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.*;
 
 public class EventHandler implements HttpHandler {
-
-private Result error;
+	/**A general Result object to return in the event of an error.*/
+	private Result error;
 	
+	/**The handler to call for an Event or an array of Events.*/
 	public void handle(HttpExchange exch) throws IOException {
 		boolean success = false;
 		JSONConverter json = new JSONConverter();
 		
 		try {
+			//Accept only GET methods.
 			if(exch.getRequestMethod().toUpperCase().equals("GET")) {
 				Headers reqHeaders = exch.getRequestHeaders();
+				//Accept only requests with an Authorization header.
 				if (reqHeaders.containsKey("Authorization")) {
 					String authToken = reqHeaders.getFirst("Authorization");
 					EventRequest er;
+					
+					//Determine which service the request is calling for.
 					String[] params = exch.getRequestURI().toString().split("/");
+					//Return a singular Event.
 					if(params.length == 3) {
 						er = new EventRequest(authToken, params[2]);
+						
+						//Check to see if the request info is valid.
 						if(validateRequestInfo(er)) {
 							EventResult res = new EventService().getEvent(er);
+							
 							exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 							OutputStream respBody = exch.getResponseBody();
 							OutputStreamWriter out = new OutputStreamWriter(respBody);
@@ -44,9 +48,13 @@ private Result error;
 							success = true;
 						}
 					}
+					//Return an array of Events.
 					else {
 						er = new EventRequest(authToken, "");
+						
+						//Check to see if the request info is valid.
 						if(validateRequestInfo(er)) {
+							
 							EventResult res = new EventService().getAll(er);
 							exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 							OutputStream respBody = exch.getResponseBody();
@@ -76,6 +84,7 @@ private Result error;
 		}
 	}
 	
+	/**Check that the request info is valid. Return true if it is, and false if there is a mistake.*/
 	private boolean validateRequestInfo(EventRequest er) {
 		if(er.getAuthTokenID().isEmpty()) { error = new Result("AuthToken empty"); return false; }
 

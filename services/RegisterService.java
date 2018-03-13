@@ -11,16 +11,15 @@ import services.DataGenerator;
 
 /**The class definition for a RegisterService object.*/
 public class RegisterService {
-
-//Constructors
 	/**The general constructor for a RegisterService object.*/
 	public RegisterService() {}
 
-//Data members
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	
-//Remaining class methods
+	
+	
 	/**Registers a user with with the server, and adds their information to the database.
 	 * @param rr			a RegisterRequest object with the user information.
 	 * @return				an AuthResult object with the response information.*/

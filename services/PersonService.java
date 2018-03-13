@@ -12,6 +12,7 @@ public class PersonService {
 	/**The general constructor for a PersonService object.*/
 	public PersonService() {}
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	
@@ -55,9 +56,10 @@ public class PersonService {
 		logger.log(Level.INFO, "Starting GetPerson in PersonService.");
 		Database db = new Database();
 		try {
+			AuthToken token;
 			try {
 				//Get AuthToken
-				AuthToken token = db.getAD().getAuthToken(pr.getAuthTokenID());
+				token = db.getAD().getAuthToken(pr.getAuthTokenID());
 				if(token == null) {
 					logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
 					return new PersonResult("Invalid AuthTokenID.");
@@ -67,6 +69,9 @@ public class PersonService {
 			}
 			
 			Person result = db.getPD().getPerson(pr.getPersonID());
+			if(!result.getDescendant().equals(token.getUserName())) {
+				throw new DatabaseException("Not authorized to access that person.");
+			}
 			db.closeConnection(true);
 			logger.log(Level.FINE, "Returning Person.");
 			logger.log(Level.INFO, "Exiting GetPerson in PersonService.");

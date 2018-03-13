@@ -14,6 +14,7 @@ import results.ListResult;
 
 import model.*;
 
+/**The DataGenerator class creates the ancestor data for the fill and register services.*/
 public class DataGenerator {
 
 	public DataGenerator() {
@@ -22,29 +23,56 @@ public class DataGenerator {
 		eventList = new ArrayList<Event>();
 	}
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
+	
+	/**The default number of generations to create unless otherwise specified.*/
 	private static int DEFAULT_GENERATIONS = 4;
+	/**A reference to the current year.*/
 	private static int CURRENT_YEAR = 2018;
+	/**The minimum marriage age. All marriage events should take place at least this amount of years after the birth years of those getting married.*/
 	private static int MIN_MARRIAGE_AGE = 18;
+	/**The mimimum baptism age. All baptism events should take place at least this amount of years after the birth of the person getting baptized.*/
 	private static int MIN_BAPTISM_AGE = 8;
+	/**An integer representing the realistic maximum number of years after marriage that the parents would have children before.
+	 * The actual age of the parents would be between MIN_MARRIAGE_AGE and (MIN_MARRIAGE_AGE + MAX_PARENT_AGE).*/
 	private static int MAX_PARENT_AGE = 32;
+	/**An integer representing the realistic maximum age of any person. All death events should take place no further than the birth year + MAX_AGE.*/
 	private static int MAX_AGE = 100;
 	
+	/**A integer to represent how many generations of data to create. This is either set to DEFAULT_GENERATIONS or specified by the end user.*/
 	private int generations = 0;
+	/**A Random object to generate random numbers for dates and ancestor names.*/
 	private Random rand;
+	/**A list of male first names to pull from when creating ancestors.*/
 	private String[] men;
+	/**A list of female first names to pull from when creating ancestors.*/
 	private String[] women;
+	/**A list of last names to pull from when creating ancestors.*/
 	private String[] last;
+	/**A list of locations to pull from when creating events for ancestors.*/
 	private Location[] locations;
+	/**An integer to track the current father's birth year.*/
 	private int fatherBirthYear;
+	/**An integer to track the current mother's birth year.*/
 	private int motherBirthYear;
+	/**An integer to track the current father's baptism year.*/
 	private int fatherBaptismYear;
+	/**An integer to track the current mother's baptism year.*/
 	private int motherBaptismYear;
+	/**An integer to track the marriage year of the current mother and father.*/
 	private int marriageYear;
+	/**An array list of Person objects that will be created.*/
 	private ArrayList<Person> personList;
+	/**An ArrayList of Event objects that will be created.*/
 	private ArrayList<Event> eventList;
 	
+	
+	
+	/**Generate Persons and Events for the default number of generations.
+	 * @param start				the start of the family tree that will be made, which is usually the Person object for the current User.
+	 * @return 					a ListResult containing the arrays of Persons and Events that are made.*/
 	public ListResult GenerateDefaultAncestorData(Person start)   {
 		logger.log(Level.INFO, "Starting GenerateDefaultAncestorData.");
 		JSONConverter j = new JSONConverter();
@@ -72,6 +100,9 @@ public class DataGenerator {
 		return new ListResult(personList.toArray(per), eventList.toArray(evt));
 	}
 	
+	/**Generate Persons and Events for the number of generations specified by the user.
+	 * @param start				the start of the family tree that will be made, which is usually the Person object for the current User.
+	 * @return					a ListResult containing the arrays of the Persons and Events that are made.*/
 	public ListResult GenerateAncestorData(Person start, int gen)   {
 		logger.log(Level.INFO, "Starting GenerateAncestorData - non default.");
 		JSONConverter j = new JSONConverter();
@@ -98,6 +129,10 @@ public class DataGenerator {
 		return new ListResult(personList.toArray(per), eventList.toArray(evt));
 	}
 	
+	/**Recursively add new generations of ancestors until the specified number of generations has been reached.
+	 * @param gen				the current generation that is being made.
+	 * @param child				the current Person object who needs to have parents made.
+	 * @param childBirthYear	the year the current Person object was born.*/
 	private void AddNewGeneration(int gen, Person child, int childBirthYear)   {
 		logger.log(Level.INFO, "Starting AddNewGeneration.");
 		logger.log(Level.FINE, String.format("At new gen start, gen = %s and generations = %s", gen, generations));
@@ -129,6 +164,10 @@ public class DataGenerator {
 		logger.log(Level.INFO, "Exiting AddNewGeneration.");
 	}
 	
+	/**Generate Events for the mother and father that were just created.
+	 * @param father			the father of the current generation.
+	 * @param mother			the mother of the current generation.
+	 * @param childBirthYear	the year that the current child was born.*/
 	private void GenerateAncestorEvents(Person father, Person mother, int childBirthYear)   {
 		logger.log(Level.INFO, "Starting GenerateAncestorEvents.");
 		GenerateBirthEvents(father, mother, childBirthYear);			
@@ -138,6 +177,10 @@ public class DataGenerator {
 		logger.log(Level.INFO, "Exiting GenerateAncestorEvents.");
 	}
 	
+	/**Generate birth Events for the father and mother.
+	 * @param father			the father of the current generation.
+	 * @param mother			the mother of the current generation.
+	 * @param childBirthYear	the year that the current child was born.*/
 	private void GenerateBirthEvents(Person father, Person mother, int childBirthYear)   {
 		logger.log(Level.FINER, "Starting GenerateBirthEvents.");
 		//Generate birth events for mother and father.
@@ -187,6 +230,9 @@ public class DataGenerator {
 		logger.log(Level.FINER, "Exiting GenerateBirthEvents.");
 	}
 	
+	/**Generate baptism Events for the father and mother.
+	 * @param father			the father of the current generation.
+	 * @param mother			the mother of the current generation.*/
 	private void GenerateBaptismEvents(Person father, Person mother)   {
 		logger.log(Level.FINER, "Starting GenerateBaptismEvents.");
 		//Generate baptism events for mother and father.
@@ -232,6 +278,9 @@ public class DataGenerator {
 		logger.log(Level.FINER, "Exiting GenerateBaptismEvents.");
 	}
 	
+	/**Generate a marriage Event for the father and mother.
+	 * @param father			the father of the current generation.
+	 * @param mother			the mother of the current generation.*/
 	private void GenerateMarriageEvent(Person father, Person mother)   {
 		logger.log(Level.FINER, "Starting GenerateMarriageEvent.");
 		//Generate marriage event.
@@ -272,6 +321,9 @@ public class DataGenerator {
 		logger.log(Level.FINER, "Exiting GenerateMarriageEvent.");
 	}
 
+	/**Generate death Events for the father and mother.
+	 * @param father			the father of the current generation.
+	 * @param mother			the mother of the current generation.*/
 	private void GenerateDeathEvents(Person father, Person mother)   {
 		logger.log(Level.FINER, "Starting GenerateDeathEvents.");
 		//Generate death events for mother and father.

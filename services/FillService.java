@@ -14,6 +14,7 @@ public class FillService {
 	/**The general constructor for a FillService object.*/
 	public FillService() {}
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	
@@ -82,6 +83,11 @@ public class FillService {
 		return new Result(String.format("Successfully added %s persons and %s events to the database.", persons, events));
 	}
 	
+	/**Verify that the User is already registered.
+	 * @param userName				the userName to check.
+	 * @param db					the Database object to check for User data.
+	 * @return						true if the user is already registered.
+	 * @throws DatabaseException	if the User is not registered.*/
 	private boolean UserAlreadyRegistered(String userName, Database db) throws DatabaseException {
 		logger.log(Level.FINER, "Validating User registration...");
 		try {

@@ -19,6 +19,7 @@ public class LoginServiceTest {
 	public void setUp() {
 		Database.setTesting(true);
 		ls = new LoginService();
+		new ClearService().clear();
 	}
 
 	@After

@@ -2,33 +2,31 @@ package handlers;
 
 import handlers.json.JSONConverter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 import requests.LoadRequest;
 import results.Result;
 import services.LoadService;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.*;
 
 public class LoadHandler implements HttpHandler {
-
+	/**A generic Result to be returned in the event of an error.*/
 	private Result error;
 	
+	/**The handler to call for the given information to be loaded into the database.*/
 	public void handle(HttpExchange exch) throws IOException {
 		boolean success = false;
 		JSONConverter json = new JSONConverter();
 		
 		try {
+			//Accept only POST methods.
 			if(exch.getRequestMethod().toUpperCase().equals("POST")) {
 				InputStream reqBody = exch.getRequestBody();
 				InputStreamReader in = new InputStreamReader(reqBody);
 				LoadRequest lr = json.JSONToObject(in, LoadRequest.class);
+				//Check to see if the request info is valid.
 				if(validateRequestInfo(lr)) {
 					Result ar = new LoadService().load(lr);
 					exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -57,8 +55,9 @@ public class LoadHandler implements HttpHandler {
 		}
 	}
 	
+	/**Check that the request info is valid. Return true if it is, and false if there is a mistake.*/
 	private boolean validateRequestInfo(LoadRequest lr) {
-		//if(lr.getUserList() == null) { error = new Result("No User array included in request"); return false; }
+		if(lr.getUserList() == null) { error = new Result("No User array included in request"); return false; }
 		if(lr.getPersonList() == null) { error = new Result("No Person array included in request"); return false; }
 		if(lr.getEventList() == null) { error = new Result("No Event array included in request"); return false; }
 		

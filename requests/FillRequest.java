@@ -2,8 +2,6 @@ package requests;
 
 /**This class defines the attributes for a FillRequest object.*/
 public class FillRequest {
-	
-//Constructors
 	/**The general constructor for a FillRequest object.
 	 * @param userName		the userName to be entered in the database.
 	 * @param generations	the number of generations to be created.*/
@@ -12,14 +10,14 @@ public class FillRequest {
 		setGenerations(generations);
 	}
 	
-//Data members
 	/**The userName to be created and entered in the database.*/
 	private String userName;
 	
 	/**The number of generations to be created in the family tree of the user. If not specified, the default is 4 generations.*/
 	private int generations;
 	
-//Setters
+	
+	
 	/**Sets the userName to be entered in the database.
 	 * @param userName		the desired userName*/
 	public void setUsername(String userName) { this.userName = userName; }
@@ -28,7 +26,6 @@ public class FillRequest {
 	 * @param generations	the desired number of generations to be created.*/
 	public void setGenerations(int generations) { this.generations = generations; }
 	
-//Getters
 	/**@return				the userName that is attached to the request.*/
 	public String getUsername() { return userName; }
 	

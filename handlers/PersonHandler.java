@@ -2,37 +2,38 @@ package handlers;
 
 import handlers.json.JSONConverter;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 import requests.PersonRequest;
-import results.PersonResult;
-import results.Result;
+import results.*;
 import services.PersonService;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.*;
 
 public class PersonHandler implements HttpHandler {
-
-private Result error;
+	/**A generic Result to be returned in the event of an error.*/
+	private Result error;
 	
+	/**The handler to call for a Person or array of Persons.*/
 	public void handle(HttpExchange exch) throws IOException {
 		boolean success = false;
 		JSONConverter json = new JSONConverter();
 		
 		try {
+			//Accept only GET methods.
 			if(exch.getRequestMethod().toUpperCase().equals("GET")) {
 				Headers reqHeaders = exch.getRequestHeaders();
+				//Accept only requests that have an Authorization header.
 				if (reqHeaders.containsKey("Authorization")) {
 					String authToken = reqHeaders.getFirst("Authorization");
 					PersonRequest pr;
+					//Determine the type of request
 					String[] params = exch.getRequestURI().toString().split("/");
+					//Return a singular Person.
 					if(params.length == 3) {
 						pr = new PersonRequest(authToken, params[2]);
+						//Check to see if the request info is valid.
 						if(validateRequestInfo(pr)) {
 							PersonResult res = new PersonService().getPerson(pr);
 							exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -44,8 +45,10 @@ private Result error;
 							success = true;
 						}
 					}
+					//Return an array of Persons.
 					else {
 						pr = new PersonRequest(authToken, "");
+						//Check to see if the request info is valid.
 						if(validateRequestInfo(pr)) {
 							PersonResult res = new PersonService().getAll(pr);
 							exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -76,6 +79,7 @@ private Result error;
 		}
 	}
 	
+	/**Check that the request info is valid. Return true if it is, and false if there is a mistake.*/
 	private boolean validateRequestInfo(PersonRequest pr) {
 		if(pr.getAuthTokenID().isEmpty()) { error = new Result("AuthToken empty"); return false; }
 

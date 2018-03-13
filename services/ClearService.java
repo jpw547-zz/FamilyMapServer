@@ -3,13 +3,14 @@ package services;
 import java.util.logging.*;
 
 import dao.*;
-import results.Result;
+import results.*;
 
 /**The class definition for a ClearService object.*/
 public class ClearService {
 	/**The general constructor for a ClearService object.*/
 	public ClearService() {}
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	

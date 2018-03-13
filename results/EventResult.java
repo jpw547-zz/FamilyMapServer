@@ -4,9 +4,7 @@ import model.Event;
 
 /**The class definition for the attributes of an EventResult.
  * <p> Extends the Result class.*/
-public class EventResult extends Result{
-	
-//Constructors
+public class EventResult extends Result{	
 	/**Constructor for returning one Event.
 	 * @param e			the event to be returned*/
 	public EventResult(Event e) {
@@ -25,14 +23,14 @@ public class EventResult extends Result{
 		setMessage(error);
 	}
 	
-//Data members
 	/**The Event to be returned.*/
 	private Event event;
 	
 	/**The array of Events to be returned.*/
 	private Event[] data;
 	
-//Setters
+	
+	
 	/**Sets the Event to be returned.
 	 * @param event		the Event to be returned*/
 	public void setEvent(Event event) { this.event = event; }
@@ -41,7 +39,6 @@ public class EventResult extends Result{
 	 * @param data		the Event array to be returned*/
 	public void setData(Event[] data) { this.data = data; }
 	
-//Getters
 	/**@return the Event to return*/
 	public Event getEvent() { return event; }
 	

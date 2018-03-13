@@ -8,37 +8,33 @@ import model.User;
 
 /**This class performs database operations for User objects.
  * @author John Werner*/
-public class UserDAO {
-	
-//Constructors
-	/**The general constructor for a UserDAO object.*/
+public class UserDAO {	
+	/**The general constructor for a UserDAO object.
+	 * @param c			the database Connection object*/
 	public UserDAO(Connection c) {
 		setConnection(c);
 	}
 	
-//Data members
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
+	static { logger = Logger.getLogger("familymaptest"); }
 	
-	static {
-        logger = Logger.getLogger("familymaptest");
-    }
-	
+	/**A reference to the database Connection object*/
 	private Connection c;
 	
-//Setters
+	
+	
+	/**Sets the connection for the UserDAO object.
+	 * @param c			the database Connection object*/
 	public void setConnection(Connection c) { this.c = c; }
-//Getters
-	/**@return				the database Connection object*/
+
+	/**@return			the database Connection object*/
 	public Connection getConnection() { return c; }
 	
-//Remaining class methods.	
 	/**Adds a User's information to the database.
 	 * @param u			the User object
 	 * @throws 			DatabaseException */
 	public void addUser(User u) throws DatabaseException {
-		//Check parameters before continuing.
-		assert u != null : "Null User. ::UD::Add";
-				
 		PreparedStatement stmt = null;
 		try {
 			try {
@@ -68,7 +64,7 @@ public class UserDAO {
 			if(e.getLocalizedMessage().contains("not unique")) {
 				throw new DatabaseException("Username already registered in the database.");
 			}
-			throw new DatabaseException(String.format("Add User failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Add User failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -76,9 +72,6 @@ public class UserDAO {
 	 * @param u			the User object to be modified
 	 * @throws 			DatabaseException */
 	public void modifyUser(User u) throws DatabaseException {
-		//Check parameters before continuing.
-		assert u != null : "Null User. ::UD::Modify";
-				
 		PreparedStatement stmt = null;
 		try {
 			try {
@@ -105,7 +98,7 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Modify User failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Modify User failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -113,9 +106,6 @@ public class UserDAO {
 	 * @param u			the User object to be removed
 	 * @throws 			DatabaseException */
 	public void deleteUser(User u) throws DatabaseException {
-		//Check parameters before continuing.
-		assert u != null : "Null User. ::UD::Delete";
-	
 		PreparedStatement stmt = null;
 		try {
 			try {
@@ -136,7 +126,7 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Delete User failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete User failed. : %s", e.getLocalizedMessage()));
 		}
 		
 	}
@@ -161,7 +151,7 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Delete all Users failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete all Users failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -200,7 +190,7 @@ public class UserDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Get User failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get User failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
@@ -241,7 +231,7 @@ public class UserDAO {
 				}
 			}
 		} catch(SQLException e) {
-			throw new DatabaseException(String.format("Get All Users failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get All Users failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 }

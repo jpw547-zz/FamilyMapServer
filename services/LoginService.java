@@ -12,6 +12,7 @@ public class LoginService {
 	/**The general constructor for a LoginService object.*/
 	public LoginService() {}
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	

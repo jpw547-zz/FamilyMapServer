@@ -11,17 +11,22 @@ import results.*;
 import com.google.gson.*;
 
 public class JSONConverter {
-//Constructors
+	/**The constructor for a JSONConverter object.*/
 	public JSONConverter() {
 		Jason = new GsonBuilder().setPrettyPrinting().create();
 	}
 	
-//Data members
+	/**The Gson object that does the generalized converting.*/
 	private Gson Jason;
+	
+	/**The array of Locations to be read in from a JSON file.*/
 	private LocationData locations;
 	
-//Remaining class methods
-	/***/
+	
+	
+	/**Converts an Object into a JSON string.
+	 * @param o			the Object to be converted.
+	 * @return 			a JSON string made from the object's attributes.*/
 	public String ObjectToJSON(Object o) {
 		if(o.getClass() == PersonResult.class) {
 			PersonResult per = (PersonResult)o;
@@ -44,17 +49,26 @@ public class JSONConverter {
 		return Jason.toJson(o);
 	}
 	
+	/**Converts a JSON string into an object.
+	 * @param j			the JSON String to be converted.
+	 * @param oClass	the class literal for the class of Object that the String will be converted into.
+	 * @return			the object of the specified class, made from the JSON String.*/
 	@SuppressWarnings("hiding")
 	public <Object> Object JSONToObject(String j, Class<Object> oClass) {
 		return Jason.fromJson(j, oClass);
 	}
 	
+	/**Converts a Reader into an object.
+	 * @param r			the Reader containing the information to be converted.
+	 * @param oClass	the class literal for the class of Object that the String will be converted into.
+	 * @return			the object of the specified class, made from the Reader.*/
 	@SuppressWarnings("hiding")
 	public <Object> Object JSONToObject(Reader r, Class<Object> oClass) {
 		return Jason.fromJson(r, oClass);
 	}
 	
-	/**
+	/**Gets the list of names needed for the other services from the JSON file.
+	 * @param type		the enum for the type of names to get (MALE, FEMALE, SURNAME).
 	 * @throws IOException */
 	public String[] GetNames(Names type) throws IOException {
 		Reader reader = null;
@@ -79,7 +93,8 @@ public class JSONConverter {
 		return null;
 	}
 	
-	/***/
+	/**Gets the list of locations to use when generating ancestor data.
+	 * @return			an array of Location objects.*/
 	public Location[] GetLocations() {
 		Reader reader;
 		try {
@@ -94,21 +109,30 @@ public class JSONConverter {
 	
 	/**This class is essentially a struct for the different parts of location information to be read in.*/
 	public class Location {
-		/**A String with the location's country.*/
+		/**A String with the Location's country.*/
 		private String country;
 		
-		/**A String with the location's city.*/
+		/**A String with the Location's city.*/
 		private String city;
 		
-		/**A double of the location's latitude.*/
+		/**A double of the Location's latitude.*/
 		private double latitude;
 		
-		/**A double of the location's longitude.*/
+		/**A double of the Location's longitude.*/
 		private double longitude;
 		
+		
+		
+		/**@return		the Location's country*/
 		public String getCountry() { return country; }
+		
+		/**@return 		the Location's city*/
 		public String getCity() { return city; }
+		
+		/**@return		the Location's latitude*/
 		public double getLatitude() { return latitude; }
+		
+		/**@return		the Location's longitude*/
 		public double getLongitude() { return longitude; }
 	}
 	
@@ -118,10 +142,12 @@ public class JSONConverter {
 		private Location[] data;
 	}
 	
+	/**A wrapper class for a String[] to allow the JSON conversion for the names.*/
 	public class StringList {
 		private String[] data;
 	}
 	
+	/**The types of names to be read and converted from JSON files.*/
 	public enum Names {
 		MALE, FEMALE, SURNAME
 	}

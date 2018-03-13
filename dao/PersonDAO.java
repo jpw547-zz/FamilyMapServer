@@ -8,34 +8,32 @@ import model.Person;
 
 /**This class performs database operations for Person objects.
  * @author John Werner*/
-public class PersonDAO {
-	
-//Constructors
-	/**The general constructor for a PersonDAO object.*/
+public class PersonDAO {	
+	/**The general constructor for a PersonDAO object.
+	 * @param c			the database Connection object*/
 	public PersonDAO(Connection c) {
 		setConnection(c);
 	}
 
-//Data members
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
+	static { logger = Logger.getLogger("familymaptest"); }
 	
-	static {
-        logger = Logger.getLogger("familymaptest");
-    }
-	
+	/**A reference to the database Connection object*/
 	private Connection c;
 	
-//Setters
+	
+	
+	/**Sets the connection for the PersonDAO object.
+	 * @param c			the database Connection object*/
 	public void setConnection(Connection c) { this.c = c; }
 	
-//Getters
-	/**@return				the database Connection object*/
+	/**@return			the database Connection object*/
 	public Connection getConnection() { return c; }
 	
-//Remaining class methods
 	/**Adds a Person's information to the database.
-	 * @param p				the Person object
-	 * @throws 				DatabaseException */
+	 * @param p			the Person object
+	 * @throws 			DatabaseException */
 	public void addPerson(Person p) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -64,13 +62,13 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Add Person failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Add Person failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Modifies an existing database entry for a Person.
-	 * @param p				the Person object to be modified
-	 * @throws 				DatabaseException */
+	 * @param p			the Person object to be modified
+	 * @throws 			DatabaseException */
 	public void modifyPerson(Person p) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -99,13 +97,13 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Modify Person failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Modify Person failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Deletes an existing database entry for a Person.
-	 * @param p				the Person object to be removed
-	 * @throws 				DatabaseException */
+	 * @param p			the Person object to be removed
+	 * @throws 			DatabaseException */
 	public void deletePerson(Person p) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -127,12 +125,12 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Delete Person failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete Person failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Deletes all Person information from the database.
-	 * @throws 				DatabaseException */
+	 * @throws 			DatabaseException */
 	public void deleteAllPersons() throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -151,14 +149,14 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Delete all Persons failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Delete all Persons failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Retrieves the information for a Person in the database.
-	 * @param personID		the identifier for the Person to be returned
-	 * @return				a Person object representing the information in the database.
-	 * @throws 				DatabaseException */
+	 * @param personID	the identifier for the Person to be returned
+	 * @return			a Person object representing the information in the database.
+	 * @throws 			DatabaseException */
 	public Person getPerson(String personID) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -189,13 +187,13 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Get Person failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get Person failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 	
 	/**Retrieves all information for all Persons in the database.
-	 * @return 				an array of Person objects representing all the information in the Person table of the database.
-	 * @throws 				DatabaseException */
+	 * @return 			an array of Person objects representing all the information in the Person table of the database.
+	 * @throws 			DatabaseException */
 	public Person[] getAllPersons(String descendant) throws DatabaseException {
 		PreparedStatement stmt = null;
 		try {
@@ -234,7 +232,7 @@ public class PersonDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(String.format("Get All Persons failed. : %s ::UD", e.getLocalizedMessage()));
+			throw new DatabaseException(String.format("Get All Persons failed. : %s", e.getLocalizedMessage()));
 		}
 	}
 }

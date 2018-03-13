@@ -9,22 +9,24 @@ import services.*;
 import requests.*;
 import results.*;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.*;
 
 public class RegisterHandler implements HttpHandler {
-
-	private AuthResult error;
+	/**A generic Result to be returned in the event of an error.*/
+	private Result error;
 	
+	/**The handler to register a user with the server.*/
 	public void handle(HttpExchange exch) throws IOException {
 		boolean success = false;
 		JSONConverter json = new JSONConverter();
 		
 		try {
+			//Accept only POST methods.
 			if(exch.getRequestMethod().toUpperCase().equals("POST")) {
 				InputStream reqBody = exch.getRequestBody();
 				InputStreamReader in = new InputStreamReader(reqBody);
 				RegisterRequest rr = json.JSONToObject(in, RegisterRequest.class);
+				//Check to see if the request info is valid.
 				if(validateRequestInfo(rr)) {
 					AuthResult ar = new RegisterService().register(rr);
 					exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -53,6 +55,7 @@ public class RegisterHandler implements HttpHandler {
 		}
 	}
 	
+	/**Check that the request info is valid. Return true if it is, and false if there is a mistake.*/
 	private boolean validateRequestInfo(RegisterRequest rr) {
 		if(rr.getUserName().isEmpty()) { error = new AuthResult("Username empty"); return false; }
 		if(rr.getPassword().isEmpty()) { error = new AuthResult("Password empty"); return false; }

@@ -12,6 +12,7 @@ public class EventService {
 	/**The general constructor for an EventService object.*/
 	public EventService() {}
 	
+	/**The Logger object to log statements on the server log.*/
 	private static Logger logger;
 	static { logger = Logger.getLogger("familymaptest"); }
 	
@@ -22,10 +23,15 @@ public class EventService {
 		logger.log(Level.INFO, "Starting GetAll in EventService.");
 		Database db = new Database();
 		try {
-			//Get AuthToken
-			AuthToken token = db.getAD().getAuthToken(er.getAuthTokenID());
-			if(token == null) {
-				logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
+			AuthToken token;
+			try {
+				//Get AuthToken
+				token = db.getAD().getAuthToken(er.getAuthTokenID());
+				if(token == null) {
+					logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
+					return new EventResult("Invalid AuthTokenID.");
+				}
+			} catch (DatabaseException e) {
 				return new EventResult("Invalid AuthTokenID.");
 			}
 			
@@ -49,7 +55,22 @@ public class EventService {
 		logger.log(Level.INFO, "Starting GetEvent in EventService.");
 		Database db = new Database();
 		try {
+			AuthToken token;
+			try {
+				//Get AuthToken
+				token = db.getAD().getAuthToken(er.getAuthTokenID());
+				if(token == null) {
+					logger.log(Level.SEVERE, "Failed to get AuthToken. ::Event");
+					return new EventResult("Invalid AuthTokenID.");
+				}
+			} catch (DatabaseException e) {
+				return new EventResult("Invalid AuthTokenID.");
+			}
+			
 			Event result = db.getED().getEvent(er.getEventID());
+			if(!result.getDescendant().equals(token.getUserName())) {
+				throw new DatabaseException("Not authorized to access that event.");
+			}
 			db.closeConnection(true);
 			logger.log(Level.FINE, "Returning Event.");
 			logger.log(Level.INFO, "Exiting GetEvent in EventService.");

@@ -1,9 +1,8 @@
 package model;
 
-/**The Event class defines the attributes required for family history events that can be used in the Family Map Server.*/
+/**The Event class defines the attributes required for family history events that can be used in the Family Map Server.
+ * @author John Werner*/
 public class Event {
-	
-//Constructors
 	/**The general constructor for an Event object.*/
 	public Event() {}
 	
@@ -29,35 +28,35 @@ public class Event {
 		setYear(year);
 	}
 	
-//Data members
 	/**A non-empty, unique identifier for the Event object.*/
-	private String eventID; // Event’s unique ID (non-empty string)
+	private String eventID;
 	
 	/**A non-empty identifier for the Person object tied to this event.*/
-	private String personID; // ID of the person this event belongs to (non-empty string)
+	private String personID;
 	
 	/**A non-empty userName for the User account that this event is tied to. (The root of the personID's family tree.)*/
-	private String descendant; // Name of user account this event belongs to (non-empty string)
+	private String descendant;
 	
 	/**The latitude coordinate of the location of the event.*/
-	private double latitude; // Latitude of the event’s location (number)
+	private double latitude;
 	
 	/**The longitude coordinate of the location of the event.*/
-	private double longitude; // Longitude of the event’s location (number)
+	private double longitude;
 	
 	/**The country of the location of the event.*/
-	private String country; // Name of country where event occurred (non-empty string)
+	private String country;
 	
 	/**The city of the location of event.*/
-	private String city; // Name of city where event occurred (non-empty string)
+	private String city;
 	
 	/**The type of event. (i.e. "birth", "baptism", etc.)*/
-	private String eventType; // Type of event (“birth”, “baptism”, etc.) (non-empty string)
+	private String eventType;
 	
 	/**The year the event occurred.*/
-	private String year; // Year the event occurred (integer formatted as string)
+	private String year;
 	
-//Setters
+	
+	
 	/**Sets the Event object's unique identifier.
 	 * @param eventID 		the string of letters and numbers to represent the Event object*/
 	public void setEventID(String eventID) { this.eventID = eventID; }
@@ -94,7 +93,6 @@ public class Event {
 	 * @param year 			the year (as a number) formatted as a string*/
 	public void setYear(String year) { this.year = year;}
 	
-//Getters
 	/**@return 				the identifier for the Event object*/
 	public String getEventID() { return eventID; }
 	

@@ -2,23 +2,22 @@ package handlers;
 
 import handlers.json.JSONConverter;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 import results.Result;
 import services.ClearService;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.*;
 
 public class ClearHandler implements HttpHandler {
-
+	/**The handler function to call for the database to be cleared.*/
 	public void handle(HttpExchange exch) throws IOException {
 		try {
 			JSONConverter json = new JSONConverter();
+			
 			Result result = new ClearService().clear();
+			
 			exch.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			OutputStream respBody = exch.getResponseBody();
 			OutputStreamWriter out = new OutputStreamWriter(respBody);
