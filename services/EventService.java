@@ -28,10 +28,13 @@ public class EventService {
 				//Get AuthToken
 				token = db.getAD().getAuthToken(er.getAuthTokenID());
 				if(token == null) {
+					db.closeConnection(false);
 					logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
 					return new EventResult("Invalid AuthTokenID.");
 				}
 			} catch (DatabaseException e) {
+				db.closeConnection(false);
+				logger.log(Level.SEVERE, "Failed to get all Events : Invalid AuthTokenID");
 				return new EventResult("Invalid AuthTokenID.");
 			}
 			

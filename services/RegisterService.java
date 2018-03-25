@@ -32,7 +32,9 @@ public class RegisterService {
 		//Create a new User object to be registered.
 		User newguy = new User(rr.getUserName(), rr.getPassword(), rr.getEmail(), rr.getFirstName(), rr.getLastName(), rr.getGender(), p.getPersonID());
 		try {
-			//The database will throw an exception if the userName is not unique.
+			if(!verifyUniqueUser(db, newguy.getUserName())) {
+				throw new DatabaseException("Username not unique.");
+			}
 			db.getUD().addUser(newguy);
 			
 			DataGenerator data = new DataGenerator();
@@ -56,6 +58,20 @@ public class RegisterService {
 			db.closeConnection(false);
 			logger.log(Level.SEVERE, String.format("Failed to register : %s", de.getLocalizedMessage()));
 			return new AuthResult(String.format("Failed to register : %s", de.getLocalizedMessage()));
+		}
+	}
+	
+	private boolean verifyUniqueUser(Database db, String userName) {
+		try {
+			//The database will throw an exception if the userName is not unique.
+			if(db.getUD().getUser(userName) != null) {
+				return false;
+			}
+			else {
+				return true;
+			}
+		} catch (DatabaseException de) {
+			return true;
 		}
 	}
 }

@@ -28,10 +28,13 @@ public class PersonService {
 				//Get AuthToken
 				token = db.getAD().getAuthToken(pr.getAuthTokenID());
 				if(token == null) {
+					db.closeConnection(false);
 					logger.log(Level.SEVERE, "Failed to get AuthToken. ::Person");
 					return new PersonResult("Invalid AuthTokenID.");
 				}
 			} catch (DatabaseException e) {
+				db.closeConnection(false);
+				logger.log(Level.SEVERE, "Failed to get all Persons : Invalid AuthTokenID");
 				return new PersonResult("Invalid AuthTokenID.");
 			}
 			
